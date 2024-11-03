@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 export function LoginPage() {
   const [value, setValue] = useState("");
 
+  const [passValue, setPassValue] = useState<string>('');
+  const [showPass, setShowPass] = useState<boolean>(false);
+
   useEffect(() => {
     fetch("http://127.0.0.1:8000/check-autorization", {
       method: "POST",
@@ -19,19 +22,41 @@ export function LoginPage() {
   const navigate = useNavigate();
   return (
     <>
-      <form action="">
-        Login: <input type="text" />
-        Haslo: <input type="password" name="" id="" />
-      </form>
-      Nie masz jeszcze konta? Utwórz jedno
-      <button
-        onClick={() => {
-          navigate("panel");
-        }}
-      >
+      <div id="container">
+        <form action="" className="form">
+          <h2>Zaloguj się</h2>
+          
+          <input type="text" id="username" name="username" placeholder="Nazwa lub Email"/> <br/>
+          
+          <div className="passwordBox">
+                <input type={showPass ? 'text' : 'password'}
+                id="password"
+                name="password"
+                placeholder="Hasło"
+                value={passValue}
+                onChange={(e) => setPassValue(e.target.value)}
+                />
+                <span
+                  className="showToggle"
+                  onClick={() => {
+                    setShowPass(!showPass);
+                  }}
+                  >
+                  {showPass ? "ukryj" : "pokaż"}
+                </span> <br/>
+          </div>
+        
+        {/* Nie masz jeszcze konta? Utwórz jedno */}
+        <button
+          onClick={() => {
+            navigate("panel");
+          }}
+        >
         Zaloguj się
-      </button>
-      <div>{value}</div>
+        </button>
+        <div>{value}</div>
+        </form>
+      </div>
     </>
   );
 }
