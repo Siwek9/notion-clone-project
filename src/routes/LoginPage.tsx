@@ -42,11 +42,10 @@ export function LoginPage() {
                     setShowPass(!showPass);
                   }}
                   >
-                  {showPass ? "ukryj" : "pokaż"}
+                  <img src={showPass ? "/src/assets/eye_closed.svg" : "/src/assets/eye.svg"} 
+                  alt={showPass ? "Ukryj" : "Pokaż"}  />
                 </span> <br/>
           </div>
-        
-        {/* Nie masz jeszcze konta? Utwórz jedno */}
         <button
           onClick={() => {
             navigate("panel");
@@ -56,7 +55,16 @@ export function LoginPage() {
         </button>
         <div>{value}</div>
         </form>
-      </div>
+        </div>
+        <br/>
+        <button
+          onClick={() => {
+            navigate("register");
+          }}
+        >
+          Nie posiadasz jeszcze konta? Utwórz je
+        </button>
+      
     </>
   );
 }
