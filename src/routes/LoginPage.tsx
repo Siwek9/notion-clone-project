@@ -91,13 +91,14 @@ export function LoginPage() {
                 </form>
             </div>
             <br />
-            <button
+            <span
+                className="nav"
                 onClick={() => {
                     navigate("register");
                 }}
             >
                 Nie posiadasz jeszcze konta? Utwórz je
-            </button>
+            </span>
         </>
     );
 }

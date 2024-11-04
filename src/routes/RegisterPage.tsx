@@ -1,91 +1,143 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function RegisterPage() {
-  const [value, setValue] = useState("");
+    const [login, setLogin] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [showPass, setShowPass] = useState(false);
+    const [passwordRepeat, setPasswordRepeat] = useState("");
+    const [showPassR, setShowPassR] = useState(false);
 
-  const [passValue, setPassValue] = useState<string>('');
-  const [showPass, setShowPass] = useState<boolean>(false);
-  const [passValueR, setPassValueR] = useState<string>('');
-  const [showPassR, setShowPassR] = useState<boolean>(false);
+    // useEffect(() => {
+    //     fetch("http://127.0.0.1:8000/check-autorization", {
+    //         method: "POST",
+    //         body: JSON.stringify({ test: "example" }),
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //     })
+    //         .then((res) => res.json())
+    //         .then((content) => setValue(JSON.stringify(content)));
+    // }, []);
 
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/check-autorization", {
-      method: "POST",
-      body: JSON.stringify({ test: "example" }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((content) => setValue(JSON.stringify(content)));
-  }, []);
+    const navigate = useNavigate();
+    return (
+        <>
+            <div id="container">
+                <form
+                    className="form"
+                    action="/"
+                    method="post"
+                    onSubmit={(event) => {
+                        const formData = {
+                            login: login,
+                            email: email,
+                            password: password,
+                            repeatPassword: passwordRepeat,
+                        };
 
-  const navigate = useNavigate();
-  return (
-    <>
-      <div id="container">
-        <form action="" className="form">
-          <h2>Zarejestruj się</h2>
-          
-          <input type="text" id="username" name="username" placeholder="Nazwa"/> <br/>
-          <input type="text" id="email" name="email" placeholder="Email"/> <br/>
-
-          <div className="passwordBox">
-                <input type={showPass ? 'text' : 'password'}
-                id="password"
-                name="password"
-                placeholder="Hasło"
-                value={passValue}
-                onChange={(e) => setPassValue(e.target.value)}
-                />
-                <span
-                  className="showToggle"
-                  onClick={() => {
-                    setShowPass(!showPass);
-                  }}
-                  >
-                  <img src={showPass ? "/src/assets/eye_closed.svg" : "/src/assets/eye.svg"} 
-                  alt={showPass ? "Ukryj" : "Pokaż"}  />
-                </span> <br/>
-          </div>
-          <div className="passwordBox">
-                <input type={showPassR ? 'text' : 'password'}
-                id="passwordRepeat"
-                name="passwordRepeat"
-                placeholder="Powtórz Hasło"
-                value={passValueR}
-                onChange={(e) => setPassValueR(e.target.value)}
-                />
-                <span
-                  className="showToggle"
-                  onClick={() => {
-                    setShowPassR(!showPassR);
-                  }}
-                  >
-                  <img src={showPassR ? "/src/assets/eye_closed.svg" : "/src/assets/eye.svg"} 
-                  alt={showPassR ? "Ukryj" : "Pokaż"}  />
-                </span> <br/>
-          </div>
-        <button
-          onClick={() => {
-            navigate("panel");
-          }}
-        >
-        Zarejestruj się
-        </button>
-        <div>{value}</div>
-        </form>
-        </div>
-        <br/>
-        <span className="nav"
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          Już posiadasz konto? Zaloguj się
-        </span>
-      
-    </>
-  );
+                        fetch("http://127.0.0.1:8000/register", {
+                            method: "POST",
+                            body: JSON.stringify(formData),
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                        })
+                            .then((res) => res.json())
+                            .then((content) => {
+                                if (content["success"]) {
+                                    navigate("/profil");
+                                } else {
+                                    console.log("nie zalogowalo cie pacanie");
+                                }
+                            });
+                        event.preventDefault();
+                    }}
+                >
+                    <h2>Zarejestruj się</h2>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Nazwa"
+                        value={login}
+                        onChange={(e) => setLogin(e.target.value)}
+                    />
+                    <br />
+                    <input
+                        type="text"
+                        id="email"
+                        name="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />{" "}
+                    <br />
+                    <div className="passwordBox">
+                        <input
+                            type={showPass ? "text" : "password"}
+                            id="password"
+                            name="password"
+                            placeholder="Hasło"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <span
+                            className="showToggle"
+                            onClick={() => {
+                                setShowPass(!showPass);
+                            }}
+                        >
+                            <img
+                                src={
+                                    showPass
+                                        ? "/src/assets/eye_closed.svg"
+                                        : "/src/assets/eye.svg"
+                                }
+                                alt={showPass ? "Ukryj" : "Pokaż"}
+                            />
+                        </span>{" "}
+                        <br />
+                    </div>
+                    <div className="passwordBox">
+                        <input
+                            type={showPassR ? "text" : "password"}
+                            id="passwordRepeat"
+                            name="passwordRepeat"
+                            placeholder="Powtórz Hasło"
+                            value={passwordRepeat}
+                            onChange={(e) => setPasswordRepeat(e.target.value)}
+                        />
+                        <span
+                            className="showToggle"
+                            onClick={() => {
+                                setShowPassR(!showPassR);
+                            }}
+                        >
+                            <img
+                                src={
+                                    showPassR
+                                        ? "/src/assets/eye_closed.svg"
+                                        : "/src/assets/eye.svg"
+                                }
+                                alt={showPassR ? "Ukryj" : "Pokaż"}
+                            />
+                        </span>{" "}
+                        <br />
+                    </div>
+                    <button type="submit">Zarejestruj się</button>
+                </form>
+            </div>
+            <br />
+            <span
+                className="nav"
+                onClick={() => {
+                    navigate("/");
+                }}
+            >
+                Już posiadasz konto? Zaloguj się
+            </span>
+        </>
+    );
 }
