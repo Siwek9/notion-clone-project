@@ -26,7 +26,7 @@ export function LoginPage() {
         <form action="" className="form">
           <h2>Zaloguj się</h2>
           
-          <input type="text" id="username" name="username" placeholder="Nazwa lub Email"/> <br/>
+          <input type="text" id="nameoremail" name="nameoremail" placeholder="Nazwa lub Email"/> <br/>
           
           <div className="passwordBox">
                 <input type={showPass ? 'text' : 'password'}
@@ -57,13 +57,13 @@ export function LoginPage() {
         </form>
         </div>
         <br/>
-        <button
+        <span className="nav"
           onClick={() => {
             navigate("register");
           }}
         >
           Nie posiadasz jeszcze konta? Utwórz je
-        </button>
+        </span>
       
     </>
   );

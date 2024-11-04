@@ -107,3 +107,12 @@ body{
 .showToggle:hover {
     color: #007bff;
 }
+
+.nav {
+    color: #007bff;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
