@@ -1,5 +1,3 @@
 export function Profile() {
-    return <>
-        Marek Marucha
-    </>
+    return <>Marek Marucha</>;
 }
