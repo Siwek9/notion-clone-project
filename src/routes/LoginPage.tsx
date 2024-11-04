@@ -41,7 +41,13 @@ export function LoginPage() {
                             },
                         })
                             .then((res) => res.json())
-                            .then((content) => console.log(content));
+                            .then((content) => {
+                                if (content["success"]) {
+                                    navigate("/panel");
+                                } else {
+                                    console.log("nie zalogowalo cie pacanie");
+                                }
+                            });
                         event.preventDefault();
                     }}
                 >
