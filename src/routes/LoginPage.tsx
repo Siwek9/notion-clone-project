@@ -43,8 +43,19 @@ export function LoginPage() {
                             .then((res) => res.json())
                             .then((content) => {
                                 if (content["success"]) {
-                                    navigate("/panel");
+                                    const session_id =
+                                        content["data"]["session_id"];
+                                    if (session_id == null) {
+                                        navigate("/");
+                                    } else {
+                                        localStorage.setItem(
+                                            "session_id",
+                                            session_id
+                                        );
+                                        navigate("/panel");
+                                    }
                                 } else {
+                                    console.log(content);
                                     console.log("nie zalogowalo cie pacanie");
                                 }
                             });
