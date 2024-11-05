@@ -148,26 +148,6 @@ body {
     height: 100%;
 }
 
-.markdown {
-    /* height: 10vh; */
-    padding: 10px 100px;
-}
-
-.markdown h1 {
-    color: blue;
-}
-
-.markdown p {
-    padding: 10px 0px;
-}
-.markdown li {
-    padding: 5px 10px;
-}
-
-.markdown h3 {
-    padding: 10px 0px;
-}
-
 header {
     width: 100vw;
     height: 13.2vh;
@@ -212,7 +192,34 @@ header {
 }
 
 .note {
+    /* padding: 10px 20px; */
     width: 85%;
     height: 100%;
     box-shadow: inset 8px 8px 20px -15px rgba(66, 68, 90, 1);
+}
+
+.note .mdxeditor {
+    padding: 10px 20px;
+}
+
+.note .mdxeditor-toolbar {
+    /* background-color: limegreen;
+    color: blue; */
+    box-shadow: #b6b6b6 0 0 10px;
+    top: 10px;
+}
+
+.markdown h1 {
+    color: blue;
+}
+
+.markdown p {
+    padding: 10px 0px;
+}
+.markdown li {
+    padding: 5px 10px;
+}
+
+.markdown h3 {
+    padding: 10px 0px;
 }
