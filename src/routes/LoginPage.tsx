@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function LoginPage() {
@@ -7,19 +7,8 @@ export function LoginPage() {
 
     const [showPass, setShowPass] = useState(false);
 
-    // useEffect(() => {
-    //     fetch("http://127.0.0.1:8000/register", {
-    //         method: "POST",
-    //         body: JSON.stringify({ test: "example" }),
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //     })
-    //         .then((res) => res.json())
-    //         .then((content) => setValue(JSON.stringify(content)));
-    // }, []);
-
     const navigate = useNavigate();
+
     return (
         <>
             <div id="container">
