@@ -3,11 +3,11 @@ import { CustomScroll } from "react-custom-scroll";
 import MarkdownEditor from "../components/MarkdownEditor";
 import { useRef } from "react";
 
-import bigosRecipe from "../bigosRecipe";
 import { useEffect, useState } from "react";
 import Note from "../utils/Note";
 import { NoteButton } from "../components/NoteButton";
 import { MDXEditorMethods } from "@mdxeditor/editor";
+import { io } from "socket.io-client";
 
 export function Panel() {
     const navigate = useNavigate();
@@ -53,6 +53,9 @@ export function Panel() {
     }
 
     useEffect(getNotes, []);
+    useEffect(() => {
+        const socket = io("http://localhost:8000");
+    }, []);
 
     return (
         <div className="panel">
@@ -106,10 +109,6 @@ export function Panel() {
                         {notes?.map((note) => (
                             <NoteButton
                                 onNoteChanged={(noteContent) => {
-                                    console.log(noteContent);
-                                    console.log(
-                                        markdownRef.current?.getMarkdown()
-                                    );
                                     markdownRef.current?.setMarkdown(
                                         noteContent
                                     );
