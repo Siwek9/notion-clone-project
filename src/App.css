@@ -24,7 +24,7 @@ body {
     width: 100%;
     max-width: 400px;
     padding: 20px;
-    margin-top: 100px;
+    /* margin-top: 100px; */
 }
 
 .form {
@@ -210,7 +210,14 @@ header {
 }
 
 .markdown h1 {
-    color: blue;
+    color: green;
+}
+
+.markdown hr {
+    /* height: 4px;
+    border: none;
+    border-radius: 4px;
+    background-color: black; */
 }
 
 .markdown p {
