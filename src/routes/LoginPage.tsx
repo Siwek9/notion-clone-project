@@ -99,6 +99,7 @@ export function LoginPage() {
             >
                 Nie posiadasz jeszcze konta? Utwórz je
             </span>
+            <img className="logo" src="/src/assets/seton.png" alt="logo" />
         </>
     );
 }

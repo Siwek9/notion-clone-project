@@ -1,8 +1,9 @@
 import Markdown from "react-markdown";
+import { useNavigate } from "react-router-dom";
 import remarkGfm from "remark-gfm";
 
 export function Panel() {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const text = `
 Źródło: https://aniagotuje.pl/przepis/bigos
@@ -97,59 +98,53 @@ Powodzenia!
 `;
     return (
         <>
-            <header>Seton</header>
-            <nav>
-                articles
-                <button>Add New Article</button>
-            </nav>
-            <main className="markdown">
-                <Markdown className="klasa" remarkPlugins={[remarkGfm]}>
-                    {text}
-                </Markdown>
-            </main>
+            <header>
+                <div className="leftPart">
+                    <img src="/src/assets/seton.png" alt="logo" />
+                </div>
+                <div className="rightPart">
+                    O profil |&nbsp;
+                    <span
+                        onClick={() => {
+                            const session_id =
+                                localStorage.getItem("session_id");
+                            if (session_id == null) {
+                                navigate("/");
+                                return;
+                            }
 
-            {/* 300 gram mąki <br />
-            2 szklanki mleka
-            <br />
-            2 jaja
-            <br />
-            1/2 tabliczki czekolady
-            <br />
-            3 banany
-            <br />
-            2 bułki
-            <br />
-            arbuz
-            <br />
-            bakłażan <br />
-            WD - 40
-            <button
-                onClick={() => {
-                    const session_id = localStorage.getItem("session_id");
-                    if (session_id == null) {
-                        navigate("/");
-                        return;
-                    }
-
-                    const formData = {
-                        session_id: session_id,
-                    };
-                    fetch("http://127.0.0.1:8000/log-out", {
-                        method: "POST",
-                        body: JSON.stringify(formData),
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    })
-                        .then((res) => res.json())
-                        .then(() => {
-                            localStorage.removeItem("session_id");
-                            navigate("/");
-                        });
-                }}
-            >
-                Wyloguj się
-            </button> */}
+                            const formData = {
+                                session_id: session_id,
+                            };
+                            fetch("http://127.0.0.1:8000/log-out", {
+                                method: "POST",
+                                body: JSON.stringify(formData),
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                            })
+                                .then((res) => res.json())
+                                .then(() => {
+                                    localStorage.removeItem("session_id");
+                                    navigate("/");
+                                });
+                            // navigate("/");
+                        }}
+                    >
+                        WYLOGUJ
+                    </span>{" "}
+                </div>
+            </header>
+            <div className="noteContainer">
+                <div className="notesList">Notatki:</div>
+                <div className="note">
+                    <main className="markdown">
+                        <Markdown className="klasa" remarkPlugins={[remarkGfm]}>
+                            {text}
+                        </Markdown>
+                    </main>
+                </div>
+            </div>
         </>
     );
 }
