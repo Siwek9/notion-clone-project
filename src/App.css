@@ -150,8 +150,8 @@ body {
 
 header {
     width: 100vw;
-    height: 13.2vh;
-    padding: 35px;
+    height: 13vh;
+    padding: 3vw;
     background: #ffffff;
     display: flex;
     flex-direction: row;
@@ -168,10 +168,14 @@ header {
     font-size: 20px;
 }
 
+.leftPart {
+    width: 9vw;
+}
+
 .leftPart img {
-    margin-left: 20px;
-    width: 6rem;
-    height: 6rem;
+    margin-left: 2.5vw;
+    width: 10vh;
+    height: 10vh;
 }
 
 .rightPart span {
@@ -185,7 +189,7 @@ header {
 }
 
 .notesList {
-    width: 15%;
+    width: 15vw;
     height: 100%;
     background: #ffffff;
     text-align: center;
@@ -193,7 +197,7 @@ header {
 
 .note {
     /* padding: 10px 20px; */
-    width: 85%;
+    width: 85vw;
     height: 100%;
     box-shadow: inset 8px 8px 20px -15px rgba(66, 68, 90, 1);
 }
@@ -229,4 +233,16 @@ header {
 
 .markdown h3 {
     padding: 10px 0px;
+}
+
+.noteBox {
+    width: 100%;
+    height: 5vh;
+    text-align: center;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: #7b7b7b 1vh solid;
+    cursor: pointer;
 }
