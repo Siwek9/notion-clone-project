@@ -9,7 +9,7 @@ export function NoteButton({
 }) {
     return (
         <>
-            <button
+            <div
                 className="noteBox"
                 onClick={() => {
                     console.log(id + " " + name);
@@ -35,7 +35,7 @@ export function NoteButton({
                 }}
             >
                 {name}
-            </button>
+            </div>
         </>
     );
 }

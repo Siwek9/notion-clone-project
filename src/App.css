@@ -238,4 +238,42 @@ header {
     align-items: center;
     border: #7b7b7b 1vh solid;
     cursor: pointer;
+    border-radius: 6%;
+}
+
+/* *************************************** */
+
+.profileContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 800px;
+    height: 600px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    animation: fade 0.5s ease;
+}
+
+.profileLeftPart {
+    width: 35%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid black;
+}
+
+.profileLeftPart img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.profileRightPart {
+    width: 65%;
+    height: 100%;
+    padding: 30px;
 }
