@@ -138,6 +138,7 @@ export function RegisterPage() {
             >
                 Już posiadasz konto? Zaloguj się
             </span>
+            <img className="logo" src="/src/assets/seton.png" alt="logo" />
         </>
     );
 }
