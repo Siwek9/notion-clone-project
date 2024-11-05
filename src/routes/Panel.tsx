@@ -1,17 +1,58 @@
 import { useNavigate } from "react-router-dom";
 import { CustomScroll } from "react-custom-scroll";
 import MarkdownEditor from "../components/MarkdownEditor";
+import { useRef } from "react";
 
 import bigosRecipe from "../bigosRecipe";
 import { useEffect, useState } from "react";
 import Note from "../utils/Note";
 import { NoteButton } from "../components/NoteButton";
+import { MDXEditorMethods } from "@mdxeditor/editor";
 
 export function Panel() {
     const navigate = useNavigate();
     const [notes, setNotes] = useState<Array<Note>>();
+    const markdownRef = useRef<MDXEditorMethods>(null);
+    // const [noteContent, setNoteContent] = useState("");
 
-    useEffect(() => {}, []);
+    function handleNotes(content: {
+        success: boolean;
+        data: { notes: Array<any> };
+    }) {
+        if (!content["success"]) return;
+
+        const notesArray = Array<Note>();
+
+        content["data"]["notes"].forEach((note: any) => {
+            console.log("siema");
+            notesArray.push(
+                new Note(
+                    note["id"],
+                    note["title"],
+                    note["create_time"],
+                    note["modification_time"],
+                    note["content"]
+                )
+            );
+        });
+        setNotes(notesArray);
+    }
+
+    function getNotes() {
+        const session_id = localStorage.getItem("session_id");
+        if (session_id == null) return;
+        fetch("http://127.0.0.1:8000/get-notes", {
+            method: "POST",
+            body: JSON.stringify({ session_id: session_id }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((res) => res.json())
+            .then(handleNotes);
+    }
+
+    useEffect(getNotes, []);
 
     return (
         <div className="panel">
@@ -60,13 +101,56 @@ export function Panel() {
             </header>
             <div className="noteContainer">
                 <div className="notesList">
-                    Notatki:
-                    <NoteButton name="Test1" id="1"></NoteButton>
-                    <NoteButton name="pipotam" id="2"></NoteButton>
+                    <CustomScroll heightRelativeToParent="100%">
+                        Notatki:
+                        {notes?.map((note) => (
+                            <NoteButton
+                                onNoteChanged={(noteContent) => {
+                                    console.log(noteContent);
+                                    console.log(
+                                        markdownRef.current?.getMarkdown()
+                                    );
+                                    markdownRef.current?.setMarkdown(
+                                        noteContent
+                                    );
+                                }}
+                                key={note.id}
+                                name={note.title}
+                                id={note.id}
+                            ></NoteButton>
+                        ))}
+                        <button
+                            onClick={() => {
+                                const session_id =
+                                    localStorage.getItem("session_id");
+                                if (session_id == null) {
+                                    navigate("/");
+                                    return;
+                                }
+                                fetch("http://127.0.0.1:8000/create-note", {
+                                    method: "POST",
+                                    body: JSON.stringify({
+                                        session_id: session_id,
+                                        note_title: "Nowa notatka",
+                                        note_content: "# Nowa Notatka",
+                                    }),
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                })
+                                    .then((res) => res.json())
+                                    .then(getNotes);
+                            }}
+                        >
+                            Dodaj nową notatkę
+                        </button>
+                    </CustomScroll>
                 </div>
                 <div className="note">
                     <CustomScroll heightRelativeToParent="100%">
-                        <MarkdownEditor>{bigosRecipe}</MarkdownEditor>
+                        <MarkdownEditor markdownRef={markdownRef}>
+                            {" "}
+                        </MarkdownEditor>
                     </CustomScroll>
                 </div>
             </div>
