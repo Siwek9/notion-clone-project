@@ -2,12 +2,14 @@ import { useNavigate } from "react-router-dom";
 import { CustomScroll } from "react-custom-scroll";
 import MarkdownEditor from "../components/MarkdownEditor";
 
-import bigosRecipe from "../bigos-recipe";
-import { Note } from "../components/Note";
+import bigosRecipe from "../bigosRecipe";
 import { useEffect, useState } from "react";
+import Note from "../utils/Note";
+import { NoteButton } from "../components/NoteButton";
+
 export function Panel() {
     const navigate = useNavigate();
-    const [notes, setNotes] = useState<Array<{ id: string; title: string }>>();
+    const [notes, setNotes] = useState<Array<Note>>();
 
     useEffect(() => {}, []);
 
@@ -57,9 +59,10 @@ export function Panel() {
                 </div>
             </header>
             <div className="noteContainer">
-                <div className="notesList">Notatki:
-                    <Note name="Test1" id="1"></Note>
-                    <Note name="pipotam" id="2"></Note>
+                <div className="notesList">
+                    Notatki:
+                    <NoteButton name="Test1" id="1"></NoteButton>
+                    <NoteButton name="pipotam" id="2"></NoteButton>
                 </div>
                 <div className="note">
                     <CustomScroll heightRelativeToParent="100%">
