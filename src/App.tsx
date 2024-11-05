@@ -33,7 +33,7 @@ function App() {
                         localStorage.removeItem("session_id");
                         if (
                             location.pathname == "/panel" ||
-                            location.pathname == "/register"
+                            location.pathname == "/profile"
                         ) {
                             navigate("/");
                         }
@@ -42,6 +42,13 @@ function App() {
                 .catch((reason) => {
                     console.log(reason);
                 });
+        } else {
+            if (
+                location.pathname == "/panel" ||
+                location.pathname == "/profile"
+            ) {
+                navigate("/");
+            }
         }
     }, [location.pathname, navigate]);
 

@@ -4,11 +4,6 @@ import MarkdownEditor from "../components/MarkdownEditor";
 
 import bigosRecipe from "../bigos-recipe";
 
-// import FakeScroll from "@yaireo/fakescroll/react.fakescroll.js";
-// import "@yaireo/fakescroll/fakescroll.css";
-
-// const onFakeScrollChange = ({ scrollRatio }) => console.log(scrollRatio);
-
 export function Panel() {
     const navigate = useNavigate();
 
@@ -25,7 +20,7 @@ export function Panel() {
                         }}
                     >
                         O profil
-                    </span>{" "}
+                    </span>
                     |&nbsp;
                     <span
                         onClick={() => {
@@ -51,11 +46,10 @@ export function Panel() {
                                     localStorage.removeItem("session_id");
                                     navigate("/");
                                 });
-                            // navigate("/");
                         }}
                     >
                         WYLOGUJ
-                    </span>{" "}
+                    </span>
                 </div>
             </header>
             <div className="noteContainer">

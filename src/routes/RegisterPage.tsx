@@ -9,18 +9,6 @@ export function RegisterPage() {
     const [passwordRepeat, setPasswordRepeat] = useState("");
     const [showPassR, setShowPassR] = useState(false);
 
-    // useEffect(() => {
-    //     fetch("http://127.0.0.1:8000/check-autorization", {
-    //         method: "POST",
-    //         body: JSON.stringify({ test: "example" }),
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //     })
-    //         .then((res) => res.json())
-    //         .then((content) => setValue(JSON.stringify(content)));
-    // }, []);
-
     const navigate = useNavigate();
     return (
         <>
@@ -47,7 +35,17 @@ export function RegisterPage() {
                             .then((res) => res.json())
                             .then((content) => {
                                 if (content["success"]) {
-                                    navigate("/profil");
+                                    const session_id =
+                                        content["data"]["session_id"];
+                                    if (session_id == null) {
+                                        navigate("/");
+                                    } else {
+                                        localStorage.setItem(
+                                            "session_id",
+                                            session_id
+                                        );
+                                        navigate("/profile");
+                                    }
                                 } else {
                                     console.log("nie zalogowalo cie pacanie");
                                 }
