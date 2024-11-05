@@ -31,7 +31,12 @@ function App() {
                         }
                     } else {
                         localStorage.removeItem("session_id");
-                        navigate("/");
+                        if (
+                            location.pathname == "/panel" ||
+                            location.pathname == "/register"
+                        ) {
+                            navigate("/");
+                        }
                     }
                 })
                 .catch((reason) => {
