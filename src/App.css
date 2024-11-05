@@ -5,7 +5,7 @@
     font-family: Arial, sans-serif;
 }
 
-body{
+body {
     height: 100%;
     display: flex;
     align-items: center;
@@ -13,7 +13,7 @@ body{
     background: #eaecf0;
 }
 
-#container{
+#container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -38,8 +38,14 @@ body{
 }
 
 @keyframes fade {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .form input[type="text"],
@@ -91,7 +97,7 @@ body{
 .showToggle {
     position: absolute;
     right: 10px;
-    top: 39%; 
+    top: 39%;
     transform: translateY(-50%);
     font-size: 14px;
     color: #007bff;
@@ -115,4 +121,8 @@ body{
     width: 100%;
     display: flex;
     justify-content: center;
+}
+
+.markdown h1 {
+    color: blue;
 }
