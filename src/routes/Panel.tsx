@@ -1,6 +1,11 @@
 import Markdown from "react-markdown";
 import { useNavigate } from "react-router-dom";
 import remarkGfm from "remark-gfm";
+import { CustomScroll } from "react-custom-scroll";
+// import FakeScroll from "@yaireo/fakescroll/react.fakescroll.js";
+// import "@yaireo/fakescroll/fakescroll.css";
+
+// const onFakeScrollChange = ({ scrollRatio }) => console.log(scrollRatio);
 
 export function Panel() {
     const navigate = useNavigate();
@@ -10,7 +15,7 @@ export function Panel() {
 
 # Przepis na bigos
 
-Zobacz jak smakuje prawdziwy bigos tradycyjny. Poznaj mój sprawdzony przepis na bigos z dużą ilością różnych mięs, z suszonymi grzybami, śliwkami i idealnie dobranymi przyprawami. To danie, które Cię zachwyci.
+Zobacz jak smakuje prawdziwy **bigos tradycyjny**. Poznaj mój sprawdzony przepis na bigos z dużą ilością różnych mięs, z suszonymi grzybami, śliwkami i idealnie dobranymi przyprawami. To danie, które Cię zachwyci.
 
 ### Czas przygotowania: 2 godziny
 
@@ -19,7 +24,7 @@ Zobacz jak smakuje prawdziwy bigos tradycyjny. Poznaj mój sprawdzony przepis na
 ### Liczba porcji: 5 kg bigosu
 
 ### W 100 g bigosu:
-#### Wartość energetyczna: 190 kcal
+Wartość energetyczna: 190 kcal
 
 ### Dieta: bezglutenowa
 
@@ -97,13 +102,20 @@ Powodzenia!
 
 `;
     return (
-        <>
+        <div className="panel">
             <header>
                 <div className="leftPart">
                     <img src="/src/assets/seton.png" alt="logo" />
                 </div>
                 <div className="rightPart">
-                    O profil |&nbsp;
+                    <span
+                        onClick={() => {
+                            navigate("/profile");
+                        }}
+                    >
+                        O profil
+                    </span>{" "}
+                    |&nbsp;
                     <span
                         onClick={() => {
                             const session_id =
@@ -138,13 +150,16 @@ Powodzenia!
             <div className="noteContainer">
                 <div className="notesList">Notatki:</div>
                 <div className="note">
-                    <main className="markdown">
-                        <Markdown className="klasa" remarkPlugins={[remarkGfm]}>
+                    <CustomScroll heightRelativeToParent="100%">
+                        <Markdown
+                            className="markdown"
+                            remarkPlugins={[remarkGfm]}
+                        >
                             {text}
                         </Markdown>
-                    </main>
+                    </CustomScroll>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

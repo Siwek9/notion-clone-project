@@ -5,6 +5,10 @@
     font-family: Arial, sans-serif;
 }
 
+html {
+    height: 100%;
+}
+
 body {
     height: 100%;
     display: flex;
@@ -140,9 +144,30 @@ body {
 
 /* ************************************** */
 
+.panel {
+    height: 100%;
+}
+
+.markdown {
+    /* height: 10vh; */
+    padding: 10px 30px;
+}
+
 .markdown h1 {
     color: blue;
 }
+
+.markdown p {
+    padding: 10px 0px;
+}
+.markdown li {
+    padding: 5px 10px;
+}
+
+.markdown h3 {
+    padding: 10px 0px;
+}
+
 header {
     width: 100vw;
     height: 13.2vh;
