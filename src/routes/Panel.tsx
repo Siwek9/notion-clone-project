@@ -69,7 +69,7 @@ export function Panel() {
                             navigate("/profile");
                         }}
                     >
-                        O profil
+                        <img src="/src/assets/profile.jpg" alt="logo" />&nbsp;PROFIL
                     </span>
                     |&nbsp;
                     <span
@@ -105,7 +105,7 @@ export function Panel() {
             <div className="noteContainer">
                 <div className="notesList">
                     <CustomScroll heightRelativeToParent="100%">
-                        Notatki:
+                        <span>Notatki</span>
                         {notes?.map((note) => (
                             <NoteButton
                                 onNoteChanged={(noteContent) => {
@@ -119,6 +119,7 @@ export function Panel() {
                             ></NoteButton>
                         ))}
                         <button
+                            className="addButton"
                             onClick={() => {
                                 const session_id =
                                     localStorage.getItem("session_id");
