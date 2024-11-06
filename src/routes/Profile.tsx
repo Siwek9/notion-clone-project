@@ -11,18 +11,17 @@ export function Profile() {
         <div className="profileContainer">
             <div className="profileLeftPart">
                 <img src="/src/assets/profile.jpg" alt="zdjęcie profilowe" />
-                <button className="noteBox" onClick={() => {
+                <button className="notePanelBox" onClick={() => {
                             navigate("/panel");
                     }}>Notatki</button>
-                {/* klasa noteBox tymczasowo */}
-                <button className="noteBox" onClick={() => {
+                <button className="notePanelBox" onClick={() => {
                     if(editMode)
                     {
                         // zapis informacji do bazy
                     }
                     setEditMode(!editMode);
                 }}>{editMode ? "Zapisz informacje" : "Edytuj informacje"}</button>
-                <button className="noteBox" onClick={() => {
+                <button className="notePanelBox" onClick={() => {
                             const session_id =
                                 localStorage.getItem("session_id");
                             if (session_id == null) {
