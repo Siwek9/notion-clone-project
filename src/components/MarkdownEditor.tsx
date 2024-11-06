@@ -24,15 +24,18 @@ import { RefObject } from "react";
 
 export default function MarkdownEditor({
     markdownRef,
+    onChange,
     children,
 }: {
     markdownRef: RefObject<MDXEditorMethods>;
+    onChange: (markdown: string) => void;
     children: string;
 }) {
     // const val = useRef<MDXEditorMethods>(null);
 
     return (
         <MDXEditor
+            onChange={onChange}
             ref={markdownRef}
             markdown={children}
             contentEditableClassName="markdown"

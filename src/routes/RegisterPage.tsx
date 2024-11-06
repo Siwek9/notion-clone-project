@@ -70,7 +70,7 @@ export function RegisterPage() {
                         placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                    />{" "}
+                    />
                     <br />
                     <div className="passwordBox">
                         <input
@@ -95,7 +95,7 @@ export function RegisterPage() {
                                 }
                                 alt={showPass ? "Ukryj" : "Pokaż"}
                             />
-                        </span>{" "}
+                        </span>
                         <br />
                     </div>
                     <div className="passwordBox">
@@ -121,7 +121,7 @@ export function RegisterPage() {
                                 }
                                 alt={showPassR ? "Ukryj" : "Pokaż"}
                             />
-                        </span>{" "}
+                        </span>
                         <br />
                     </div>
                     <button type="submit">Zarejestruj się</button>

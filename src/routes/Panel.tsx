@@ -7,12 +7,14 @@ import { useEffect, useState } from "react";
 import Note from "../utils/Note";
 import { NoteButton } from "../components/NoteButton";
 import { MDXEditorMethods } from "@mdxeditor/editor";
-import { io } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
 
 export function Panel() {
+    const [socket, setSocket] = useState<Socket | undefined>(undefined);
     const navigate = useNavigate();
     const [notes, setNotes] = useState<Array<Note>>();
     const markdownRef = useRef<MDXEditorMethods>(null);
+    const [currentNoteID, setCurrentNoteID] = useState<string | null>(null);
     // const [noteContent, setNoteContent] = useState("");
 
     function handleNotes(content: {
@@ -54,7 +56,11 @@ export function Panel() {
 
     useEffect(getNotes, []);
     useEffect(() => {
-        const socket = io("http://localhost:8000");
+        var socket = io("http://localhost:8000");
+        setSocket(socket);
+        socket.on("note_content", (note_content: string) => {
+            markdownRef.current?.setMarkdown(note_content);
+        });
     }, []);
 
     return (
@@ -108,10 +114,28 @@ export function Panel() {
                         Notatki:
                         {notes?.map((note) => (
                             <NoteButton
-                                onNoteChanged={(noteContent) => {
+                                onNoteChanged={async (noteContent) => {
                                     markdownRef.current?.setMarkdown(
                                         noteContent
                                     );
+                                    if (socket != undefined) {
+                                        socket.emit("close_note", {
+                                            session_id:
+                                                localStorage.getItem(
+                                                    "session_id"
+                                                )!,
+                                            note_id: note.id,
+                                        });
+                                        socket.emit("open_note", {
+                                            session_id:
+                                                localStorage.getItem(
+                                                    "session_id"
+                                                )!,
+                                            note_id: note.id,
+                                        });
+
+                                        setCurrentNoteID(note.id);
+                                    }
                                 }}
                                 key={note.id}
                                 name={note.title}
@@ -147,7 +171,20 @@ export function Panel() {
                 </div>
                 <div className="note">
                     <CustomScroll heightRelativeToParent="100%">
-                        <MarkdownEditor markdownRef={markdownRef}>
+                        <MarkdownEditor
+                            onChange={(markdown) => {
+                                console.log(socket);
+                                if (socket == undefined) return;
+                                console.log("siema312312");
+                                socket.emit("edit_note", {
+                                    session_id:
+                                        localStorage.getItem("session_id")!,
+                                    note_id: currentNoteID,
+                                    note_content: markdown,
+                                });
+                            }}
+                            markdownRef={markdownRef}
+                        >
                             {" "}
                         </MarkdownEditor>
                     </CustomScroll>
