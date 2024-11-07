@@ -56,7 +56,7 @@ export function Panel() {
 
     useEffect(getNotes, []);
     useEffect(() => {
-        var socket = io("http://localhost:8000");
+        const socket = io("http://localhost:8000");
         setSocket(socket);
         socket.on("note_content", (note_content: string) => {
             markdownRef.current?.setMarkdown(note_content);
@@ -75,7 +75,8 @@ export function Panel() {
                             navigate("/profile");
                         }}
                     >
-                        <img src="/src/assets/profile.jpg" alt="logo" />&nbsp;PROFIL
+                        <img src="/src/assets/profile.jpg" alt="logo" />
+                        &nbsp;PROFIL
                     </span>
                     |&nbsp;
                     <span
@@ -119,13 +120,15 @@ export function Panel() {
                                         noteContent
                                     );
                                     if (socket != undefined) {
-                                        socket.emit("close_note", {
-                                            session_id:
-                                                localStorage.getItem(
-                                                    "session_id"
-                                                )!,
-                                            note_id: note.id,
-                                        });
+                                        if (currentNoteID != undefined) {
+                                            socket.emit("close_note", {
+                                                session_id:
+                                                    localStorage.getItem(
+                                                        "session_id"
+                                                    )!,
+                                                note_id: currentNoteID,
+                                            });
+                                        }
                                         socket.emit("open_note", {
                                             session_id:
                                                 localStorage.getItem(
@@ -136,6 +139,7 @@ export function Panel() {
 
                                         setCurrentNoteID(note.id);
                                     }
+                                    setCurrentNoteID(note.id);
                                 }}
                                 key={note.id}
                                 name={note.title}
