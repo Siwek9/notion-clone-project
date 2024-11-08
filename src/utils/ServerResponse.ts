@@ -1,5 +1,5 @@
 export type ServerResponse = {
     success: boolean;
     code: number;
-    data: any | undefined;
+    data: object | undefined;
 };

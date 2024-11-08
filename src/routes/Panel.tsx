@@ -5,7 +5,7 @@ import { useRef } from "react";
 import { useEffect, useState } from "react";
 import Note from "../utils/Note";
 import { NoteButton } from "../components/NoteButton";
-import { MDXEditorMethods, compose } from "@mdxeditor/editor";
+import { MDXEditorMethods } from "@mdxeditor/editor";
 import notesOperation from "../utils/NotesOperations";
 
 export function Panel() {

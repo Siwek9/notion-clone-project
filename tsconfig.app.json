@@ -20,8 +20,5 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true
     },
-    "include": [
-        "src",
-        "../notion-clone-project-server/app/utils/bigosRecipe.ts"
-    ]
+    "include": ["src"]
 }

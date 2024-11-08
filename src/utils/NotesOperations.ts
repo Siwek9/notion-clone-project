@@ -8,13 +8,13 @@ export default {
     startSocket(url: string) {
         socket = io(url);
     },
-    onNoteChanged(onNoteChanged: (content: string) => any) {
+    onNoteChanged(onNoteChanged: (content: string) => void) {
         socket.on("note_content", onNoteChanged);
     },
     async ReadNote(noteID: string): Promise<string> {
         const session_id = localStorage.getItem("session_id");
         if (session_id == null) return "";
-        let res = await fetch("http://127.0.0.1:8000/read-note", {
+        const res = await fetch("http://127.0.0.1:8000/read-note", {
             method: "POST",
             body: JSON.stringify({
                 session_id: session_id,
@@ -24,7 +24,7 @@ export default {
                 "Content-Type": "application/json",
             },
         });
-        let content: ServerResponse = await res.json();
+        const content: ServerResponse = await res.json();
 
         if (!content.success) return "";
         const noteContent: string = content["data"]["noteContent"];
@@ -81,30 +81,39 @@ export default {
     async getNotes(): Promise<Array<Note>> {
         const session_id = localStorage.getItem("session_id");
         if (session_id == null) return [];
-        var res = await fetch("http://127.0.0.1:8000/get-notes", {
+        const res = await fetch("http://127.0.0.1:8000/get-notes", {
             method: "POST",
             body: JSON.stringify({ session_id: session_id }),
             headers: {
                 "Content-Type": "application/json",
             },
         });
-        var content: ServerResponse = await res.json();
+        const content: ServerResponse = await res.json();
 
         if (!content.success) return [];
 
         const notesArray = Array<Note>();
 
-        content.data["notes"].forEach((note: any) => {
-            notesArray.push(
-                new Note(
-                    note["id"],
-                    note["title"],
-                    note["create_time"],
-                    note["modification_time"],
-                    note["content"]
-                )
-            );
-        });
+        if (content.data == undefined) return [];
+        content.data["notes"].forEach(
+            (note: {
+                id: string;
+                title: string;
+                create_time: string;
+                modification_time: string;
+                content: string;
+            }) => {
+                notesArray.push(
+                    new Note(
+                        note["id"],
+                        note["title"],
+                        note["create_time"],
+                        note["modification_time"],
+                        note["content"]
+                    )
+                );
+            }
+        );
         return notesArray;
     },
 };
