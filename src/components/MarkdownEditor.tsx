@@ -31,8 +31,6 @@ export default function MarkdownEditor({
     onChange: (markdown: string) => void;
     children: string;
 }) {
-    // const val = useRef<MDXEditorMethods>(null);
-
     return (
         <MDXEditor
             onChange={onChange}

@@ -2,91 +2,35 @@ import { useNavigate } from "react-router-dom";
 import { CustomScroll } from "react-custom-scroll";
 import MarkdownEditor from "../components/MarkdownEditor";
 import { useRef } from "react";
-
 import { useEffect, useState } from "react";
 import Note from "../utils/Note";
 import { NoteButton } from "../components/NoteButton";
-import { MDXEditorMethods } from "@mdxeditor/editor";
-import { Socket, io } from "socket.io-client";
+import { MDXEditorMethods, compose } from "@mdxeditor/editor";
+import notesOperation from "../utils/NotesOperations";
 
 export function Panel() {
-    const [socket, setSocket] = useState<Socket | undefined>(undefined);
+    // const [socket, setSocket] = useState<Socket | undefined>(undefined);
     const navigate = useNavigate();
     const [notes, setNotes] = useState<Array<Note>>();
     const markdownRef = useRef<MDXEditorMethods>(null);
-    // const [currentNoteID, setCurrentNoteID] = useState<string | null>(null);
 
-    function handleNotes(content: {
-        success: boolean;
-        data: { notes: Array<any> };
-    }) {
-        if (!content["success"]) return;
-
-        const notesArray = Array<Note>();
-
-        content["data"]["notes"].forEach((note: any) => {
-            console.log("siema");
-            notesArray.push(
-                new Note(
-                    note["id"],
-                    note["title"],
-                    note["create_time"],
-                    note["modification_time"],
-                    note["content"]
-                )
-            );
-        });
-        setNotes(notesArray);
-    }
-
-    function getNotes() {
-        const session_id = localStorage.getItem("session_id");
-        if (session_id == null) return;
-        fetch("http://127.0.0.1:8000/get-notes", {
-            method: "POST",
-            body: JSON.stringify({ session_id: session_id }),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((res) => res.json())
-            .then(handleNotes);
-    }
-
-    useEffect(getNotes, []);
     useEffect(() => {
-        const socket = io("http://localhost:8000");
-        setSocket(socket);
-        socket.on("note_content", (note_content: string) => {
-            markdownRef.current?.setMarkdown(note_content);
+        notesOperation.getNotes().then((notes) => setNotes(notes));
+    }, []);
+
+    useEffect(() => {
+        notesOperation.startSocket("http://localhost:8000");
+
+        notesOperation.onNoteChanged((content) => {
+            markdownRef.current?.setMarkdown(content);
         });
 
-        const currentNoteID = localStorage.getItem("currentNoteID");
+        const currentNoteID = localStorage.getItem("current_note_id");
         if (currentNoteID == null) return;
 
-        const session_id = localStorage.getItem("session_id");
-        if (session_id == null) return;
-        fetch("http://127.0.0.1:8000/read-note", {
-            method: "POST",
-            body: JSON.stringify({
-                session_id: session_id,
-                note_id: currentNoteID,
-            }),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((res) => res.json())
-            .then((content) => {
-                if (!content["success"]) return;
-                const noteContent: string = content["data"]["noteContent"];
-                markdownRef.current?.setMarkdown(noteContent);
-                if (socket == undefined) return;
-                socket.emit("open_note", {
-                    session_id: localStorage.getItem("session_id")!,
-                    note_id: currentNoteID,
-                });
-            });
+        notesOperation.ReadNote(currentNoteID).then((noteContent) => {
+            markdownRef.current?.setMarkdown(noteContent);
+        });
     }, []);
 
     return (
@@ -127,6 +71,7 @@ export function Panel() {
                                 .then((res) => res.json())
                                 .then(() => {
                                     localStorage.removeItem("session_id");
+                                    localStorage.removeItem("current_note_id");
                                     navigate("/");
                                 });
                         }}
@@ -141,35 +86,9 @@ export function Panel() {
                         <span>Notatki</span>
                         {notes?.map((note) => (
                             <NoteButton
-                                onNoteChanged={async (noteContent) => {
+                                onNoteChanged={(noteContent) => {
                                     markdownRef.current?.setMarkdown(
                                         noteContent
-                                    );
-                                    if (socket != undefined) {
-                                        const currentNoteID =
-                                            localStorage.getItem(
-                                                "currentNoteID"
-                                            );
-                                        if (currentNoteID != null) {
-                                            socket.emit("close_note", {
-                                                session_id:
-                                                    localStorage.getItem(
-                                                        "session_id"
-                                                    )!,
-                                                note_id: currentNoteID,
-                                            });
-                                        }
-                                        socket.emit("open_note", {
-                                            session_id:
-                                                localStorage.getItem(
-                                                    "session_id"
-                                                )!,
-                                            note_id: note.id,
-                                        });
-                                    }
-                                    localStorage.setItem(
-                                        "currentNoteID",
-                                        note.id
                                     );
                                 }}
                                 key={note.id}
@@ -179,26 +98,14 @@ export function Panel() {
                         ))}
                         <button
                             className="addButton"
-                            onClick={() => {
-                                const session_id =
-                                    localStorage.getItem("session_id");
-                                if (session_id == null) {
-                                    navigate("/");
-                                    return;
-                                }
-                                fetch("http://127.0.0.1:8000/create-note", {
-                                    method: "POST",
-                                    body: JSON.stringify({
-                                        session_id: session_id,
-                                        note_title: "Nowa notatka",
-                                        note_content: "# Nowa Notatka",
-                                    }),
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                    },
-                                })
-                                    .then((res) => res.json())
-                                    .then(getNotes);
+                            onClick={async () => {
+                                const nodeID =
+                                    await notesOperation.createNewNote();
+                                const notes = await notesOperation.getNotes();
+                                setNotes(notes);
+                                const noteContent =
+                                    await notesOperation.ReadNote(nodeID);
+                                markdownRef.current?.setMarkdown(noteContent);
                             }}
                         >
                             Dodaj nową notatkę
@@ -208,20 +115,7 @@ export function Panel() {
                 <div className="note">
                     <CustomScroll heightRelativeToParent="100%">
                         <MarkdownEditor
-                            onChange={(markdown) => {
-                                if (socket == undefined) return;
-                                const currentNoteID =
-                                    localStorage.getItem("currentNoteID");
-
-                                if (currentNoteID == null) return;
-
-                                socket.emit("edit_note", {
-                                    session_id:
-                                        localStorage.getItem("session_id")!,
-                                    note_id: currentNoteID,
-                                    note_content: markdown,
-                                });
-                            }}
+                            onChange={notesOperation.ModifyNote}
                             markdownRef={markdownRef}
                         >
                             {" "}

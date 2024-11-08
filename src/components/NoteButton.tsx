@@ -1,3 +1,5 @@
+import NotesOperations from "../utils/NotesOperations";
+
 export function NoteButton({
     onNoteChanged,
     name,
@@ -11,26 +13,9 @@ export function NoteButton({
         <>
             <div
                 className="noteBox"
-                onClick={() => {
-                    const session_id = localStorage.getItem("session_id");
-                    if (session_id == null) return;
-                    fetch("http://127.0.0.1:8000/read-note", {
-                        method: "POST",
-                        body: JSON.stringify({
-                            session_id: session_id,
-                            note_id: id,
-                        }),
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    })
-                        .then((res) => res.json())
-                        .then((content) => {
-                            if (!content["success"]) return;
-                            const noteContent: string =
-                                content["data"]["noteContent"];
-                            onNoteChanged(noteContent);
-                        });
+                onClick={async () => {
+                    const content = await NotesOperations.ReadNote(id);
+                    onNoteChanged(content);
                 }}
             >
                 {name}
