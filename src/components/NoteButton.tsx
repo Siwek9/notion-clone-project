@@ -12,7 +12,6 @@ export function NoteButton({
             <div
                 className="noteBox"
                 onClick={() => {
-                    console.log(id + " " + name);
                     const session_id = localStorage.getItem("session_id");
                     if (session_id == null) return;
                     fetch("http://127.0.0.1:8000/read-note", {

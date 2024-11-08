@@ -14,8 +14,7 @@ export function Panel() {
     const navigate = useNavigate();
     const [notes, setNotes] = useState<Array<Note>>();
     const markdownRef = useRef<MDXEditorMethods>(null);
-    const [currentNoteID, setCurrentNoteID] = useState<string | null>(null);
-    // const [noteContent, setNoteContent] = useState("");
+    // const [currentNoteID, setCurrentNoteID] = useState<string | null>(null);
 
     function handleNotes(content: {
         success: boolean;
@@ -61,6 +60,33 @@ export function Panel() {
         socket.on("note_content", (note_content: string) => {
             markdownRef.current?.setMarkdown(note_content);
         });
+
+        const currentNoteID = localStorage.getItem("currentNoteID");
+        if (currentNoteID == null) return;
+
+        const session_id = localStorage.getItem("session_id");
+        if (session_id == null) return;
+        fetch("http://127.0.0.1:8000/read-note", {
+            method: "POST",
+            body: JSON.stringify({
+                session_id: session_id,
+                note_id: currentNoteID,
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((res) => res.json())
+            .then((content) => {
+                if (!content["success"]) return;
+                const noteContent: string = content["data"]["noteContent"];
+                markdownRef.current?.setMarkdown(noteContent);
+                if (socket == undefined) return;
+                socket.emit("open_note", {
+                    session_id: localStorage.getItem("session_id")!,
+                    note_id: currentNoteID,
+                });
+            });
     }, []);
 
     return (
@@ -120,7 +146,11 @@ export function Panel() {
                                         noteContent
                                     );
                                     if (socket != undefined) {
-                                        if (currentNoteID != undefined) {
+                                        const currentNoteID =
+                                            localStorage.getItem(
+                                                "currentNoteID"
+                                            );
+                                        if (currentNoteID != null) {
                                             socket.emit("close_note", {
                                                 session_id:
                                                     localStorage.getItem(
@@ -136,10 +166,11 @@ export function Panel() {
                                                 )!,
                                             note_id: note.id,
                                         });
-
-                                        setCurrentNoteID(note.id);
                                     }
-                                    setCurrentNoteID(note.id);
+                                    localStorage.setItem(
+                                        "currentNoteID",
+                                        note.id
+                                    );
                                 }}
                                 key={note.id}
                                 name={note.title}
@@ -178,9 +209,12 @@ export function Panel() {
                     <CustomScroll heightRelativeToParent="100%">
                         <MarkdownEditor
                             onChange={(markdown) => {
-                                console.log(socket);
                                 if (socket == undefined) return;
-                                console.log("siema312312");
+                                const currentNoteID =
+                                    localStorage.getItem("currentNoteID");
+
+                                if (currentNoteID == null) return;
+
                                 socket.emit("edit_note", {
                                     session_id:
                                         localStorage.getItem("session_id")!,
