@@ -1,36 +1,52 @@
 .profileContainer {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    width: 800px;
-    height: 600px;
-    padding: 20px;
+    /* justify-content: center; */
+    width: 78vw;
+    height: 800px;
+    /* padding: 20px; */
     background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     animation: fade 0.5s ease;
 }
 
-.profileLeftPart {
-    width: 35%;
+#leftPart, #middlePart, #rightPart {
+    flex: 1;
     height: 100%;
+}
+
+#leftPart {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid black;
 }
 
-.profileLeftPart img {
+#leftPart img {
     width: 200px;
     height: 200px;
     border-radius: 50%;
 }
 
-.profileRightPart {
-    width: 65%;
-    height: 100%;
-    padding: 30px;
+#middlePart {
+    box-sizing: border-box;
+    padding-right: 2vw;
+    padding-left: 2vw;
+    padding-top: 5vh;
+    padding-bottom: 5vh;
+    flex: 1.5;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
+#rightPart {
+    /* padding: 30px; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .notePanelBox {

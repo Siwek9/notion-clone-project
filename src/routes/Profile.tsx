@@ -11,7 +11,7 @@ export function Profile() {
     const navigate = useNavigate();
     return (
         <div className="profileContainer">
-            <div className="profileLeftPart">
+            <div id="leftPart">
                 <img src="/src/assets/profile.jpg" alt="zdjęcie profilowe" />
                 <button
                     className="notePanelBox"
@@ -61,8 +61,8 @@ export function Profile() {
                     Wyloguj
                 </button>
             </div>
-            <div className="profileRightPart">
-                <h1>Ustawienia profilu</h1>
+            <div id="middlePart">
+            <h1>Ustawienia profilu</h1>
                 {!editMode ? (
                     <span>{name}</span>
                 ) : (
@@ -101,13 +101,15 @@ export function Profile() {
                         onChange={(e) => setDescription(e.target.value)}
                     />
                 )}
-                <br />
-                <button
+            </div>
+            <div id="rightPart">
+            <button
+                    className="notePanelBox"
                     onClick={() => {
                         document.querySelector("dialog")!.showModal();
                     }}
                 >
-                    Open Dialog
+                    Dodaj znajomego
                 </button>
                 <dialog>
                     <p>Śmieszne rzeczy</p>
