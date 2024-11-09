@@ -1,3 +1,5 @@
+import "../style/Panel.css";
+
 import { useNavigate } from "react-router-dom";
 import { CustomScroll } from "react-custom-scroll";
 import MarkdownEditor from "../components/MarkdownEditor";
