@@ -1,7 +1,8 @@
 import "../style/Profile.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import FetchToServer from "../utils/FetchToServer";
 
 export function Profile() {
     const [editMode, setEditMode] = useState(false);
@@ -11,6 +12,38 @@ export function Profile() {
     const navigate = useNavigate();
     const [password, setPassword] = useState("");
     const [showPass, setShowPass] = useState(false);
+
+    useEffect(() => {
+        const session_id = localStorage.getItem("session_id");
+        if (session_id == null) return;
+        FetchToServer<{
+            userData: {
+                id: number;
+                name: string;
+                email: string;
+                profile_picture: string;
+                description: string;
+            };
+            friendRequests: Array<{
+                name: string;
+                profile_picture: string;
+                request_id: string;
+            }>;
+            friends: Array<{
+                name: string;
+                profile_picture: string;
+            }>;
+        }>(
+            "/get-profile-data",
+            JSON.stringify({ session_id: session_id })
+        ).then((response) => {
+            if (!response.success) return;
+            setName(response.data.userData.name);
+            setEmail(response.data.userData.email);
+            setDescription(response.data.userData.description);
+        });
+    }, []);
+
     return (
         <div className="profileContainer">
             <div id="leftPart">
