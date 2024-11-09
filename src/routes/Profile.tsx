@@ -9,6 +9,8 @@ export function Profile() {
     const [email, setEmail] = useState("marek@mail.com");
     const [description, setDescription] = useState("");
     const navigate = useNavigate();
+    const [password, setPassword] = useState("");
+    const [showPass, setShowPass] = useState(false);
     return (
         <div className="profileContainer">
             <div id="leftPart">
@@ -63,8 +65,9 @@ export function Profile() {
             </div>
             <div id="middlePart">
             <h1>Ustawienia profilu</h1>
+                <p className="inputLabel">Nazwa</p>
                 {!editMode ? (
-                    <span>{name}</span>
+                    <span className="lockedInput">{name}</span>
                 ) : (
                     <input
                         type="text"
@@ -76,8 +79,9 @@ export function Profile() {
                     />
                 )}
                 <br />
+                <p className="inputLabel">Email</p>
                 {!editMode ? (
-                    <span>{email}</span>
+                    <span className="lockedInput">{email}</span>
                 ) : (
                     <input
                         type="text"
@@ -92,18 +96,48 @@ export function Profile() {
                 {!editMode ? (
                     <span></span>
                 ) : (
-                    <input
-                        type="text"
-                        id="description"
-                        name="description"
-                        placeholder={description}
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
+                    <>
+                        <p className="inputLabel">Hasło</p>
+                        <div className="profilePasswordBox">
+                        <input
+                            type={showPass ? "text" : "password"}
+                            id="password"
+                            name="password"
+                            placeholder="Hasło"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <span
+                            className="profileShowToggle"
+                            onClick={() => {
+                                setShowPass(!showPass);
+                            }}
+                        >
+                            <img
+                                src={
+                                    showPass
+                                        ? "/src/assets/eye_closed.svg"
+                                        : "/src/assets/eye.svg"
+                                }
+                                alt={showPass ? "Ukryj" : "Pokaż"}
+                            />
+                        </span>
+                        </div>
+                        <p className="inputLabel">Opis</p>
+                        <input
+                            type="text"
+                            id="description"
+                            name="description"
+                            placeholder={description}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
+                    </>
                 )}
             </div>
             <div id="rightPart">
-            <button
+                <h1>Znajomi:</h1>
+                <button
                     className="notePanelBox"
                     onClick={() => {
                         document.querySelector("dialog")!.showModal();

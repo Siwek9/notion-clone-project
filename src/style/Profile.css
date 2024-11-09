@@ -31,6 +31,9 @@
 }
 
 #middlePart {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     box-sizing: border-box;
     padding-right: 2vw;
     padding-left: 2vw;
@@ -39,6 +42,39 @@
     flex: 1.5;
     border-left: 1px solid black;
     border-right: 1px solid black;
+}
+
+#middlePart input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 25px;
+    color: #333;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+#middlePart h1 {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+#middlePart input:focus {
+    border-color: #7b7b7b;
+}
+
+.lockedInput, .inputLabel {
+    font-size: 30px;
+}
+
+.inputLabel {
+    color:#333;
+}
+
+.lockedInput {
+    color: #7b7b7b;
 }
 
 #rightPart {
@@ -74,4 +110,26 @@ dialog {
 ::backdrop {
     background-color: rgba(0, 0, 0, 0.6);
     /* opacity: 0.75; */
+}
+
+.profileShowToggle {
+    position: absolute;
+    right: 0%;
+    top: 0%;
+    transform: translateY(25%) translateX(-20%);
+    font-size: 20px;
+    color: #7b7b7b;
+    cursor: pointer;
+    user-select: none;
+    background: none;
+    border: none;
+    outline: none;
+    padding: 5px;
+    transition: color 0.3s ease;
+}
+
+.profilePasswordBox {
+    position: relative;
+    display: flex;
+    align-items: center;
 }
