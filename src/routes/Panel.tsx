@@ -36,12 +36,43 @@ export function Panel() {
     }, []);
 
     return (
-        <div className="panel">
-            <header>
-                <div className="leftPart">
-                    <img src="/src/assets/seton.png" alt="logo" />
+        <div className="panel"> 
+            <div className="leftPart">
+                <img src="/src/assets/seton.png" alt="logo" />
+                <div className="notesList">
+                    <CustomScroll heightRelativeToParent="100%">
+                        <span>Notatki</span>
+                        {notes?.map((note) => (
+                            <NoteButton
+                                onNoteChanged={(noteContent) => {
+                                    markdownRef.current?.setMarkdown(
+                                        noteContent
+                                    );
+                                }}
+                                key={note.id}
+                                name={note.title}
+                                id={note.id}
+                            ></NoteButton>
+                        ))}
+                        <button
+                            className="addButton"
+                            onClick={async () => {
+                                const nodeID =
+                                    await notesOperation.createNewNote();
+                                const notes = await notesOperation.getNotes();
+                                setNotes(notes);
+                                const noteContent =
+                                    await notesOperation.ReadNote(nodeID);
+                                markdownRef.current?.setMarkdown(noteContent);
+                            }}
+                        >
+                            Dodaj nową notatkę
+                        </button>
+                    </CustomScroll>
+                    </div>
                 </div>
                 <div className="rightPart">
+                    <header>
                     <span
                         onClick={() => {
                             navigate("/profile");
@@ -80,40 +111,8 @@ export function Panel() {
                     >
                         WYLOGUJ
                     </span>
-                </div>
-            </header>
-            <div className="noteContainer">
-                <div className="notesList">
-                    <CustomScroll heightRelativeToParent="100%">
-                        <span>Notatki</span>
-                        {notes?.map((note) => (
-                            <NoteButton
-                                onNoteChanged={(noteContent) => {
-                                    markdownRef.current?.setMarkdown(
-                                        noteContent
-                                    );
-                                }}
-                                key={note.id}
-                                name={note.title}
-                                id={note.id}
-                            ></NoteButton>
-                        ))}
-                        <button
-                            className="addButton"
-                            onClick={async () => {
-                                const nodeID =
-                                    await notesOperation.createNewNote();
-                                const notes = await notesOperation.getNotes();
-                                setNotes(notes);
-                                const noteContent =
-                                    await notesOperation.ReadNote(nodeID);
-                                markdownRef.current?.setMarkdown(noteContent);
-                            }}
-                        >
-                            Dodaj nową notatkę
-                        </button>
-                    </CustomScroll>
-                </div>
+                    </header>
+                
                 <div className="note">
                     <CustomScroll heightRelativeToParent="100%">
                         <MarkdownEditor
