@@ -64,7 +64,7 @@ export function Profile() {
                 </button>
             </div>
             <div id="middlePart">
-            <h1>Ustawienia profilu</h1>
+                <h1>Ustawienia profilu</h1>
                 <p className="inputLabel">Nazwa</p>
                 {!editMode ? (
                     <span className="lockedInput">{name}</span>
@@ -99,29 +99,29 @@ export function Profile() {
                     <>
                         <p className="inputLabel">Hasło</p>
                         <div className="profilePasswordBox">
-                        <input
-                            type={showPass ? "text" : "password"}
-                            id="password"
-                            name="password"
-                            placeholder="Hasło"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <span
-                            className="profileShowToggle"
-                            onClick={() => {
-                                setShowPass(!showPass);
-                            }}
-                        >
-                            <img
-                                src={
-                                    showPass
-                                        ? "/src/assets/eye_closed.svg"
-                                        : "/src/assets/eye.svg"
-                                }
-                                alt={showPass ? "Ukryj" : "Pokaż"}
+                            <input
+                                type={showPass ? "text" : "password"}
+                                id="password"
+                                name="password"
+                                placeholder="Hasło"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                             />
-                        </span>
+                            <span
+                                className="profileShowToggle"
+                                onClick={() => {
+                                    setShowPass(!showPass);
+                                }}
+                            >
+                                <img
+                                    src={
+                                        showPass
+                                            ? "/src/assets/eye_closed.svg"
+                                            : "/src/assets/eye.svg"
+                                    }
+                                    alt={showPass ? "Ukryj" : "Pokaż"}
+                                />
+                            </span>
                         </div>
                         <p className="inputLabel">Opis</p>
                         <input
