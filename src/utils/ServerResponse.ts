@@ -1,5 +1,5 @@
-export type ServerResponse = {
+export type ServerResponse<T = undefined> = {
     success: boolean;
     code: number;
-    data: object | undefined;
+    data: T;
 };

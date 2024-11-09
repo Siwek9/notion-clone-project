@@ -1,6 +1,7 @@
 import { Socket, io } from "socket.io-client";
 import Note from "./Note";
 import { ServerResponse } from "./ServerResponse";
+import fetchToServer from "./FetchToServer";
 
 let socket: Socket;
 
@@ -24,10 +25,12 @@ export default {
                 "Content-Type": "application/json",
             },
         });
-        const content: ServerResponse = await res.json();
+        const content: ServerResponse<{ noteContent: string }> =
+            await res.json();
 
         if (!content.success) return "";
-        const noteContent: string = content["data"]["noteContent"];
+
+        const noteContent: string = content.data.noteContent;
 
         const currentNoteID = localStorage.getItem("current_note_id");
         if (currentNoteID != null) {
@@ -73,7 +76,7 @@ export default {
                 "Content-Type": "application/json",
             },
         });
-        const content: ServerResponse = await res.json();
+        const content: ServerResponse<{ nodeID: string }> = await res.json();
 
         if (!content.success) return "";
         return content.data["nodeID"];
@@ -81,39 +84,31 @@ export default {
     async getNotes(): Promise<Array<Note>> {
         const session_id = localStorage.getItem("session_id");
         if (session_id == null) return [];
-        const res = await fetch("http://127.0.0.1:8000/get-notes", {
-            method: "POST",
-            body: JSON.stringify({ session_id: session_id }),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        const content: ServerResponse = await res.json();
-
-        if (!content.success) return [];
-
-        const notesArray = Array<Note>();
-
-        if (content.data == undefined) return [];
-        content.data["notes"].forEach(
-            (note: {
+        const response = await fetchToServer<{
+            notes: Array<{
                 id: string;
                 title: string;
                 create_time: string;
                 modification_time: string;
                 content: string;
-            }) => {
-                notesArray.push(
-                    new Note(
-                        note["id"],
-                        note["title"],
-                        note["create_time"],
-                        note["modification_time"],
-                        note["content"]
-                    )
-                );
-            }
-        );
+            }>;
+        }>("/get-notes", JSON.stringify({ session_id: session_id }));
+
+        if (!response.success) return [];
+
+        const notesArray = Array<Note>();
+
+        response.data.notes.forEach((note) => {
+            notesArray.push(
+                new Note(
+                    note.id,
+                    note.title,
+                    note.create_time,
+                    note.modification_time,
+                    note.content
+                )
+            );
+        });
         return notesArray;
     },
 };
