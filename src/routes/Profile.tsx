@@ -102,6 +102,19 @@ export function Profile() {
                     />
                 )}
                 <br />
+                <button
+                    onClick={() => {
+                        document.querySelector("dialog")!.showModal();
+                    }}
+                >
+                    Open Dialog
+                </button>
+                <dialog>
+                    <p>Śmieszne rzeczy</p>
+                    <form method="dialog">
+                        <button>OK</button>
+                    </form>
+                </dialog>
             </div>
         </div>
     );
