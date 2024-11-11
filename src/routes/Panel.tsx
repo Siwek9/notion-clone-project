@@ -55,20 +55,22 @@ export function Panel() {
                                 id={note.id}
                             ></NoteButton>
                         ))}
-                        <button
-                            className="addButton"
-                            onClick={async () => {
-                                const nodeID =
-                                    await notesOperation.createNewNote();
-                                const notes = await notesOperation.getNotes();
-                                setNotes(notes);
-                                const noteContent =
-                                    await notesOperation.ReadNote(nodeID);
-                                markdownRef.current?.setMarkdown(noteContent);
-                            }}
-                        >
-                            Dodaj nową notatkę
-                        </button>
+                        <div>
+                            <button
+                                className="addButton"
+                                onClick={async () => {
+                                    const nodeID =
+                                        await notesOperation.createNewNote();
+                                    const notes = await notesOperation.getNotes();
+                                    setNotes(notes);
+                                    const noteContent =
+                                        await notesOperation.ReadNote(nodeID);
+                                    markdownRef.current?.setMarkdown(noteContent);
+                                }}
+                            >
+                                Dodaj nową notatkę
+                            </button>
+                        </div>
                     </CustomScroll>
                 </div>
             </div>
@@ -80,9 +82,9 @@ export function Panel() {
                         }}
                     >
                         <img src="/src/assets/profile.jpg" alt="logo" />
-                        &nbsp;PROFIL
+                        &nbsp;PROFIL&nbsp;
                     </span>
-                    |&nbsp;
+                    &nbsp;&nbsp;&nbsp;
                     <span
                         onClick={() => {
                             const session_id =

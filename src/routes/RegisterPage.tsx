@@ -10,6 +10,8 @@ export function RegisterPage() {
     const [showPass, setShowPass] = useState(false);
     const [passwordRepeat, setPasswordRepeat] = useState("");
     const [showPassR, setShowPassR] = useState(false);
+    const [errorContent, setErrorContent] = useState("Wpisane dane są wadliwe");
+    const [showError, setErrorVisilibity] = useState(false);
 
     const navigate = useNavigate();
     return (
@@ -50,6 +52,8 @@ export function RegisterPage() {
                                     }
                                 } else {
                                     console.log("nie zalogowalo cie pacanie");
+                                    setErrorContent(errorContent);
+                                    setErrorVisilibity(true);
                                 }
                             });
                         event.preventDefault();
@@ -127,6 +131,7 @@ export function RegisterPage() {
                         <br />
                     </div>
                     <button type="submit">Zarejestruj się</button>
+                    {showError ? <div className="errorMessage">{errorContent}</div> : <></>}
                 </form>
             </div>
             <br />

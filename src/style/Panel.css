@@ -54,6 +54,9 @@ header span {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    /* font-weight: bold; */
+    font-size: 20px;
+    color: #444444;
 }
 header span img {
     width: 6vh;
@@ -78,6 +81,13 @@ header span img {
 
 .markdown h1 {
     color: green;
+    font-size: 40px;
+    padding: 10px;
+    text-shadow: 1px 1px 1px rgba(66, 68, 90, 1);
+}
+
+.markdown h2 {
+    font-size: 30px;
 }
 
 .markdown p {
@@ -87,8 +97,23 @@ header span img {
     padding: 5px 10px;
 }
 
+.markdown ul {
+    list-style:square;
+}
+
 .markdown h3 {
     padding: 10px 0px;
+}
+
+.markdown hr {
+    border: 1px solid #444444;
+}
+
+.markdown a {
+    text-decoration: none;
+    color: rgb(18, 46, 206);
+    text-shadow: 0.5px 0.5px 0.5px #1c52d0;
+    cursor: pointer;
 }
 
 .noteBox {

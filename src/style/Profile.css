@@ -81,9 +81,9 @@
 
 #rightPart {
     display: flex;
-    padding: 0 20px;
+    padding: 20px 20px;
     flex-direction: column;
-    justify-content: center;
+    justify-content:space-between;
     align-items: center;
 }
 
@@ -158,4 +158,8 @@ dialog input[type="text"]:focus {
     position: relative;
     display: flex;
     align-items: center;
+}
+
+.invites {
+    margin: 10px;
 }

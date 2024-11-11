@@ -122,3 +122,10 @@
     left: 0;
     top: 0;
 }
+
+.errorMessage {
+    color: #c62525;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}

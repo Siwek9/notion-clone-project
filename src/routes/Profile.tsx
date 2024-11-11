@@ -193,127 +193,131 @@ export function Profile() {
                 )}
             </div>
             <div id="rightPart">
-                <h1>Znajomi ({friendList.length}):</h1>
-                {friendList.length == 0 ? (
-                    <p>Twoja lista znajomych jest pusta</p>
-                ) : (
-                    friendList?.map((friend) => (
-                        <div key={friend.name}>{friend.name}</div>
-                    ))
-                )}
-                <button
-                    className="notePanelBox"
-                    onClick={() => {
-                        addFriendDialog.current?.showModal();
-                        // document.querySelector("dialog")!.showModal();
-                    }}
-                >
-                    Dodaj znajomego
-                </button>
-                <dialog ref={addFriendDialog}>
-                    <h1>
-                        Podaj email/nazwę użytkownika, którego chcesz zaprosić
-                        do znajomych:
-                    </h1>
-                    <input
-                        ref={addFriendInput}
-                        type="text"
-                        placeholder="Nazwa użytkownika / email"
-                    />
+                <div>
+                    <h1>Znajomi ({friendList.length}):</h1>
+                    {friendList.length == 0 ? (
+                        <p>Twoja lista znajomych jest pusta</p>
+                    ) : (
+                        friendList?.map((friend) => (
+                            <div key={friend.name}>{friend.name}</div>
+                        ))
+                    )}
                     <button
                         className="notePanelBox"
                         onClick={() => {
-                            if (addFriendInput.current == null) {
-                                addFriendDialog.current?.close();
-                                return;
-                            }
-                            const session_id =
-                                localStorage.getItem("session_id");
-                            if (session_id == null) {
-                                addFriendDialog.current?.close();
-                                return;
-                            }
-
-                            const loginOrEmail = addFriendInput.current.value;
-
-                            if (loginOrEmail != "") {
-                                FetchToServer(
-                                    "/send-friend-request",
-                                    JSON.stringify({
-                                        session_id: session_id,
-                                        loginOrEmail: loginOrEmail,
-                                    })
-                                ).then((response) => {
-                                    console.log(response);
-                                });
-                            }
-                            addFriendInput.current.value = "";
-                            addFriendDialog.current?.close();
+                            addFriendDialog.current?.showModal();
+                            // document.querySelector("dialog")!.showModal();
                         }}
                     >
-                        OK
+                        Dodaj znajomego
                     </button>
-                </dialog>
-                <h1>Zaproszenia do znajomych ({friendRequestList.length}):</h1>
-                {friendRequestList.length == 0 ? (
-                    <p>Nie masz jeszcze żadnych zaproszeń do znajomych</p>
-                ) : (
-                    friendRequestList.map((friendRequest) => (
-                        <div key={friendRequest.request_id}>
-                            {friendRequest.name}
-                            <button
-                                onClick={() => {
-                                    const session_id =
-                                        localStorage.getItem("session_id");
-                                    if (session_id == null) {
-                                        return;
-                                    }
+                    <dialog ref={addFriendDialog}>
+                        <h1>
+                            Podaj email/nazwę użytkownika, którego chcesz zaprosić
+                            do znajomych:
+                        </h1>
+                        <input
+                            ref={addFriendInput}
+                            type="text"
+                            placeholder="Nazwa użytkownika / email"
+                        />
+                        <button
+                            className="notePanelBox"
+                            onClick={() => {
+                                if (addFriendInput.current == null) {
+                                    addFriendDialog.current?.close();
+                                    return;
+                                }
+                                const session_id =
+                                    localStorage.getItem("session_id");
+                                if (session_id == null) {
+                                    addFriendDialog.current?.close();
+                                    return;
+                                }
 
+                                const loginOrEmail = addFriendInput.current.value;
+
+                                if (loginOrEmail != "") {
                                     FetchToServer(
-                                        "/accept-friend-request",
+                                        "/send-friend-request",
                                         JSON.stringify({
                                             session_id: session_id,
-                                            request_id:
-                                                friendRequest.request_id,
+                                            loginOrEmail: loginOrEmail,
                                         })
                                     ).then((response) => {
                                         console.log(response);
-                                        if (response.success) {
-                                            fetchUserData();
-                                        }
                                     });
-                                }}
-                            >
-                                Tak
-                            </button>
-                            <button
-                                onClick={() => {
-                                    const session_id =
-                                        localStorage.getItem("session_id");
-                                    if (session_id == null) {
-                                        return;
-                                    }
+                                }
+                                addFriendInput.current.value = "";
+                                addFriendDialog.current?.close();
+                            }}
+                        >
+                            OK
+                        </button>
+                    </dialog>
+                </div>
+                <div>
+                    <h1 className="invites">Zaproszenia do znajomych ({friendRequestList.length}):</h1>
+                    {friendRequestList.length == 0 ? (
+                        <p>Nie masz jeszcze żadnych zaproszeń do znajomych</p>
+                    ) : (
+                        friendRequestList.map((friendRequest) => (
+                            <div key={friendRequest.request_id}>
+                                {friendRequest.name}
+                                <button
+                                    onClick={() => {
+                                        const session_id =
+                                            localStorage.getItem("session_id");
+                                        if (session_id == null) {
+                                            return;
+                                        }
 
-                                    FetchToServer(
-                                        "/deny-friend-request",
-                                        JSON.stringify({
-                                            session_id: session_id,
-                                            request_id:
-                                                friendRequest.request_id,
-                                        })
-                                    ).then((response) => {
-                                        console.log(response);
-                                        if (response.success) {
-                                            fetchUserData();
+                                        FetchToServer(
+                                            "/accept-friend-request",
+                                            JSON.stringify({
+                                                session_id: session_id,
+                                                request_id:
+                                                    friendRequest.request_id,
+                                            })
+                                        ).then((response) => {
+                                            console.log(response);
+                                            if (response.success) {
+                                                fetchUserData();
+                                            }
+                                        });
+                                    }}
+                                >
+                                    Tak
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        const session_id =
+                                            localStorage.getItem("session_id");
+                                        if (session_id == null) {
+                                            return;
                                         }
-                                    });
-                                }}
-                            >
-                                Nie
-                            </button>
-                        </div>
-                    ))
-                )}
+
+                                        FetchToServer(
+                                            "/deny-friend-request",
+                                            JSON.stringify({
+                                                session_id: session_id,
+                                                request_id:
+                                                    friendRequest.request_id,
+                                            })
+                                        ).then((response) => {
+                                            console.log(response);
+                                            if (response.success) {
+                                                fetchUserData();
+                                            }
+                                        });
+                                    }}
+                                >
+                                    Nie
+                                </button>
+                            </div>
+                        ))
+                    )}
+                </div>
             </div>
         </div>
     );

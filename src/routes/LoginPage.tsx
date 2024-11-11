@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 export function LoginPage() {
     const [loginOrEmail, setLoginOrEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [errorContent, setErrorContent] = useState("Wpisane dane są nieprawidłowe");
+    const [showError, setErrorVisilibity] = useState(false);
 
     const [showPass, setShowPass] = useState(false);
 
@@ -48,6 +50,8 @@ export function LoginPage() {
                                 } else {
                                     console.log(content);
                                     console.log("nie zalogowalo cie pacanie");
+                                    setErrorContent(errorContent);
+                                    setErrorVisilibity(true);
                                 }
                             });
                         event.preventDefault();
@@ -88,8 +92,9 @@ export function LoginPage() {
                             />
                         </span>
                         <br />
-                    </div>
+                    </div>            
                     <button>Zaloguj się</button>
+                    {showError ? <div className="errorMessage">{errorContent}</div> : <></>}
                 </form>
             </div>
             <br />
