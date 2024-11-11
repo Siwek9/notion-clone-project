@@ -108,7 +108,7 @@ export function Profile() {
                         name="name"
                         placeholder={name}
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        // onChange={(e) => setName(e.target.value)}
                     />
                 )}
                 <br />
@@ -120,7 +120,7 @@ export function Profile() {
                         type="text"
                         id="email"
                         name="email"
-                        placeholder={email}
+                        placeholder="Podaj email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />

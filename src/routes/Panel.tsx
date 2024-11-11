@@ -36,7 +36,7 @@ export function Panel() {
     }, []);
 
     return (
-        <div className="panel"> 
+        <div className="panel">
             <div className="leftPart">
                 <img src="/src/assets/seton.png" alt="logo" />
                 <div className="notesList">
@@ -69,10 +69,10 @@ export function Panel() {
                             Dodaj nową notatkę
                         </button>
                     </CustomScroll>
-                    </div>
                 </div>
-                <div className="rightPart">
-                    <header>
+            </div>
+            <div className="rightPart">
+                <header>
                     <span
                         onClick={() => {
                             navigate("/profile");
@@ -111,8 +111,8 @@ export function Panel() {
                     >
                         WYLOGUJ
                     </span>
-                    </header>
-                
+                </header>
+
                 <div className="note">
                     <CustomScroll heightRelativeToParent="100%">
                         <MarkdownEditor
