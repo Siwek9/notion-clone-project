@@ -10,12 +10,14 @@ import { NoteButton } from "../components/NoteButton";
 import { MDXEditorMethods } from "@mdxeditor/editor";
 import notesOperation from "../utils/NotesOperations";
 import FetchToServer from "../utils/FetchToServer";
+import ShareDialog from "../components/shareDialog";
 
 export function Panel() {
-    // const [socket, setSocket] = useState<Socket | undefined>(undefined);
     const navigate = useNavigate();
     const [notes, setNotes] = useState<Array<Note>>();
     const markdownRef = useRef<MDXEditorMethods>(null);
+
+    const shareDialogRef = useRef<HTMLDialogElement>(null);
 
     useEffect(() => {
         notesOperation.getNotes().then((notes) => setNotes(notes));
@@ -112,18 +114,22 @@ export function Panel() {
                         WYLOGUJ
                     </span>
                 </header>
-
                 <div className="note">
                     <CustomScroll heightRelativeToParent="100%">
                         <MarkdownEditor
                             onChange={notesOperation.ModifyNote}
                             markdownRef={markdownRef}
+                            shareDialogRef={shareDialogRef}
                         >
                             {" "}
                         </MarkdownEditor>
                     </CustomScroll>
                 </div>
             </div>
+            <ShareDialog
+                onSharing={(personName, shareMode) => {}}
+                shareDialogRef={shareDialogRef}
+            />
         </div>
     );
 }
