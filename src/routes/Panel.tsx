@@ -9,6 +9,7 @@ import Note from "../utils/Note";
 import { NoteButton } from "../components/NoteButton";
 import { MDXEditorMethods } from "@mdxeditor/editor";
 import notesOperation from "../utils/NotesOperations";
+import FetchToServer from "../utils/FetchToServer";
 
 export function Panel() {
     // const [socket, setSocket] = useState<Socket | undefined>(undefined);
@@ -94,19 +95,16 @@ export function Panel() {
                             const formData = {
                                 session_id: session_id,
                             };
-                            fetch("http://127.0.0.1:8000/log-out", {
-                                method: "POST",
-                                body: JSON.stringify(formData),
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                            })
-                                .then((res) => res.json())
-                                .then(() => {
+                            FetchToServer(
+                                "/log-out",
+                                JSON.stringify(formData)
+                            ).then((response) => {
+                                if (response.success) {
                                     localStorage.removeItem("session_id");
                                     localStorage.removeItem("current_note_id");
                                     navigate("/");
-                                });
+                                }
+                            });
                         }}
                     >
                         WYLOGUJ
