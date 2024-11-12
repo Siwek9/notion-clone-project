@@ -63,14 +63,17 @@ export function Panel() {
                                 onClick={async () => {
                                     const nodeID =
                                         await notesOperation.createNewNote();
-                                    const notes = await notesOperation.getNotes();
+                                    const notes =
+                                        await notesOperation.getNotes();
                                     setNotes(notes);
                                     const noteContent =
                                         await notesOperation.ReadNote(nodeID);
-                                    markdownRef.current?.setMarkdown(noteContent);
+                                    markdownRef.current?.setMarkdown(
+                                        noteContent
+                                    );
                                 }}
                             >
-                                Dodaj nową notatkę
+                                Dodaj nową prostą notatkę
                             </button>
                         </div>
                     </CustomScroll>

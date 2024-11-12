@@ -69,8 +69,9 @@ export default {
             method: "POST",
             body: JSON.stringify({
                 session_id: session_id,
-                note_title: "Nowa notatka",
-                note_content: "# Nowa Notatka",
+                note_title: "Nowa prosta notatka",
+                note_content:
+                    "# Nowa Prosta Notatka \n ## Stworzona przy pomocy prostego przycisku w panelu zarządzania prostymi notatkami w innowacyjnej aplikacji Seton",
             }),
             headers: {
                 "Content-Type": "application/json",

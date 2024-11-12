@@ -58,6 +58,7 @@ header span {
     font-size: 20px;
     color: #444444;
 }
+
 header span img {
     width: 6vh;
     height: 6vh;
@@ -93,12 +94,13 @@ header span img {
 .markdown p {
     padding: 10px 0px;
 }
+
 .markdown li {
     padding: 5px 10px;
 }
 
 .markdown ul {
-    list-style:square;
+    list-style: square;
 }
 
 .markdown h3 {
@@ -132,7 +134,7 @@ header span img {
 
 .addButton {
     margin-top: 2vh;
-    width: 50%;
+    width: 60%;
     height: 6vh;
     background: #444444;
     color: #ffffff;
