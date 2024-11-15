@@ -10,7 +10,7 @@ import { NoteButton } from "../components/NoteButton";
 import { MDXEditorMethods } from "@mdxeditor/editor";
 import notesOperation from "../utils/NotesOperations";
 import FetchToServer from "../utils/FetchToServer";
-import ShareDialog from "../components/shareDialog";
+import ShareDialog from "../components/ShareDialog";
 
 export function Panel() {
     const navigate = useNavigate();
@@ -19,12 +19,14 @@ export function Panel() {
 
     const shareDialogRef = useRef<HTMLDialogElement>(null);
 
+    let address: string;
     useEffect(() => {
         notesOperation.getNotes().then((notes) => setNotes(notes));
     }, []);
 
     useEffect(() => {
-        notesOperation.startSocket("http://localhost:8000");
+        address = window.location.origin.replace(":5173", ":8000");
+        notesOperation.startSocket(address);
 
         notesOperation.onNoteChanged((content) => {
             markdownRef.current?.setMarkdown(content);

@@ -4,7 +4,8 @@ export default async function <T>(
     target: string,
     body: BodyInit | null | undefined
 ): Promise<ServerResponse<T>> {
-    const res = await fetch(`http://localhost:8000${target}`, {
+    const address = window.location.origin.replace(":5173", ":8000");
+    const res = await fetch(`${address}${target}`, {
         method: "post",
         headers: {
             "Content-Type": "application/json",
