@@ -132,7 +132,23 @@ export function Panel() {
                 </div>
             </div>
             <ShareDialog
-                onSharing={(personName, shareMode) => {}}
+                onSharing={(personName, shareMode) => {
+                    const session_id = localStorage.getItem("session_id");
+                    if (session_id == null) return;
+                    const currentNoteID =
+                        localStorage.getItem("current_note_id");
+                    if (currentNoteID == null) return;
+
+                    FetchToServer(
+                        "/share-note",
+                        JSON.stringify({
+                            session_id: session_id,
+                            friend_name: personName,
+                            note_id: currentNoteID,
+                            share_mode: shareMode,
+                        })
+                    );
+                }}
                 shareDialogRef={shareDialogRef}
             />
         </div>

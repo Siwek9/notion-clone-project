@@ -1,0 +1,60 @@
+.choose-friend {
+    width: 50%;
+    font-size: 20px;
+    padding: 10px;
+    outline: none;
+    margin: 5px;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.share-title {
+    font-size: 25px;
+    margin: 15px 0;
+}
+
+.allow-write-button {
+    display: flex;
+    flex-direction: row;
+    border-radius: 20px;
+    border: 2px solid black;
+    width: 120px;
+    overflow: hidden;
+}
+
+.allow-write-single-button {
+    padding: 10px;
+    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* width: 50px; */
+    width: 100%;
+    height: 100%;
+    flex-grow: 1;
+    align-content: center;
+    font-weight: bold;
+}
+
+.allow-write-input:checked + .allow-write-single-button {
+    background-color: black;
+    color: white;
+}
+.allow-write-input {
+    display: none;
+}
+
+.share-button {
+    border: none;
+    margin-top: 2vh;
+    width: 60%;
+    height: 6vh;
+    background: hsl(0, 0%, 27%);
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.share-button:hover {
+    cursor: pointer;
+    background-color: hsl(0, 0%, 23%);
+}

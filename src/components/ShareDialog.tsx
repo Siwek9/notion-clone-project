@@ -1,5 +1,8 @@
-import { RefObject } from "react";
+import { RefObject, useEffect, useState } from "react";
 import ShareMode from "../utils/ShareMode";
+import "../style/ShareDialog.css";
+import Friend from "../utils/Friend";
+import FetchToServer from "../utils/FetchToServer";
 
 export default function ShareDialog({
     shareDialogRef,
@@ -8,19 +11,111 @@ export default function ShareDialog({
     shareDialogRef: RefObject<HTMLDialogElement>;
     onSharing: (personName: string, shareMode: ShareMode) => void;
 }) {
+    const [friendList, setFriendList] = useState<Array<Friend> | null>(null);
+    const [choosenFriend, setChoosenFriend] = useState<string | null>(null);
+    const [canWriteStatus, setCanWriteStatus] = useState<ShareMode>(
+        ShareMode.CanRead
+    );
+
+    useEffect(() => {
+        const session_id = localStorage.getItem("session_id");
+        if (session_id == null) return;
+        FetchToServer<{
+            friends: Array<{
+                name: string;
+                profile_picture: string;
+            }>;
+        }>("/get-friend-list", JSON.stringify({ session_id: session_id })).then(
+            (response) => {
+                if (response.success) {
+                    const tempFriendList = response.data.friends.map(
+                        (friend) =>
+                            new Friend(friend.name, friend.profile_picture)
+                    );
+                    setFriendList(tempFriendList);
+                    if (tempFriendList.length > 0) {
+                        setChoosenFriend(tempFriendList[0].name);
+                    }
+                }
+            }
+        );
+    }, []);
+
     return (
         <dialog ref={shareDialogRef}>
             <h1>Komu chcesz udostępnić tą notatkę?</h1>
             <br />
-            <select>
-                <option value="lol">lol</option>
+            <select
+                className="choose-friend"
+                defaultValue={
+                    friendList != null ? friendList[0].name : undefined
+                }
+                onChange={(value) => {
+                    setChoosenFriend(value.target.value);
+                }}
+            >
+                {friendList?.map((friend, index) => (
+                    <option key={index} value={friend.name}>
+                        {friend.name}
+                    </option>
+                ))}
             </select>
             <br />
-            <input type="radio" name="allowWrite" value="yes" />
+            <h2 className="share-title">Zezwól na edytowanie</h2>
+            <div className="allow-write-button">
+                <input
+                    className="allow-write-input"
+                    id="allow-write-yes"
+                    type="radio"
+                    name="allowWrite"
+                    value="yes"
+                    checked={canWriteStatus == ShareMode.CanWrite}
+                    onChange={(event) => {
+                        if (event.target.value == "yes") {
+                            setCanWriteStatus(ShareMode.CanWrite);
+                        } else {
+                            setCanWriteStatus(ShareMode.CanRead);
+                        }
+                    }}
+                />
+                <label
+                    className="allow-write-single-button"
+                    htmlFor="allow-write-yes"
+                >
+                    Yes
+                </label>
+                <input
+                    className="allow-write-input"
+                    id="allow-write-no"
+                    type="radio"
+                    name="allowWrite"
+                    value="no"
+                    checked={canWriteStatus == ShareMode.CanRead}
+                    onChange={(event) => {
+                        if (event.target.value == "yes") {
+                            setCanWriteStatus(ShareMode.CanWrite);
+                        } else {
+                            setCanWriteStatus(ShareMode.CanRead);
+                        }
+                    }}
+                />
+                <label
+                    className="allow-write-single-button"
+                    htmlFor="allow-write-no"
+                >
+                    No
+                </label>
+            </div>
             <br />
-            <input type="radio" name="allowWrite" value="no" checked />
-            <br />
-            <button onClick={() => onSharing("lool", ShareMode.CanRead)}>
+            <button
+                className="share-button"
+                onClick={() => {
+                    if (choosenFriend != null) {
+                        onSharing(choosenFriend, canWriteStatus);
+                    }
+                    shareDialogRef.current?.close();
+                }}
+            >
                 Udostępnij
             </button>
         </dialog>
