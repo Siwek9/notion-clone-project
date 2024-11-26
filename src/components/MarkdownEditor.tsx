@@ -23,16 +23,21 @@ import {
 import "@mdxeditor/editor/style.css";
 import { RefObject } from "react";
 import ShareButton from "./ShareButton";
+import DeleteButton from "./DeleteButton";
 
 export default function MarkdownEditor({
     markdownRef,
     shareDialogRef,
     onChange,
+    onDelete,
+    isOwner,
     children,
 }: {
     markdownRef: RefObject<MDXEditorMethods>;
     shareDialogRef: RefObject<HTMLDialogElement>;
     onChange: (markdown: string) => void;
+    onDelete: () => void;
+    isOwner: boolean;
     children: string;
 }) {
     return (
@@ -70,6 +75,13 @@ export default function MarkdownEditor({
                                         }}
                                     ></ShareButton>
                                 </ButtonWithTooltip>
+                                {isOwner ? (
+                                    <ButtonWithTooltip title="Delete Note">
+                                        <DeleteButton
+                                            onClick={onDelete}
+                                        ></DeleteButton>
+                                    </ButtonWithTooltip>
+                                ) : undefined}
                             </>
                         ),
                     }),

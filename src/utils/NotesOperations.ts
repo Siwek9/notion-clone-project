@@ -12,9 +12,9 @@ export default {
     onNoteChanged(onNoteChanged: (content: string) => void) {
         socket.on("note_content", onNoteChanged);
     },
-    async ReadNote(noteID: string): Promise<string> {
+    async ReadNote(noteID: string): Promise<[string, number]> {
         const session_id = localStorage.getItem("session_id");
-        if (session_id == null) return "";
+        if (session_id == null) return ["", -1];
         const res = await fetch("http://127.0.0.1:8000/read-note", {
             method: "POST",
             body: JSON.stringify({
@@ -25,10 +25,12 @@ export default {
                 "Content-Type": "application/json",
             },
         });
-        const content: ServerResponse<{ noteContent: string }> =
-            await res.json();
+        const content: ServerResponse<{
+            noteContent: string;
+            ownership: number;
+        }> = await res.json();
 
-        if (!content.success) return "";
+        if (!content.success) return ["", -1];
 
         const noteContent: string = content.data.noteContent;
 
@@ -47,7 +49,7 @@ export default {
 
         localStorage.setItem("current_note_id", noteID);
 
-        return noteContent;
+        return [noteContent, content.data.ownership];
     },
     async ModifyNote(markdown: string) {
         const currentNoteID = localStorage.getItem("current_note_id");
@@ -77,10 +79,11 @@ export default {
                 "Content-Type": "application/json",
             },
         });
-        const content: ServerResponse<{ nodeID: string }> = await res.json();
+        const content: ServerResponse<{ noteID: string }> = await res.json();
 
         if (!content.success) return "";
-        return content.data["nodeID"];
+        console.log();
+        return content.data.noteID;
     },
     async getNotes(): Promise<Array<Note>> {
         const session_id = localStorage.getItem("session_id");

@@ -134,8 +134,10 @@ header span img {
 
 .addButton {
     margin-top: 2vh;
-    width: 60%;
-    height: 6vh;
+    max-width: 60%;
+    /* width: 60%; */
+    /* height: 6vh; */
+    padding: 5px;
     background: #444444;
     color: #ffffff;
     font-size: 18px;

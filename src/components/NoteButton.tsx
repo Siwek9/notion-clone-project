@@ -5,7 +5,7 @@ export function NoteButton({
     name,
     id,
 }: {
-    onNoteChanged: (noteContent: string) => void;
+    onNoteChanged: (noteContent: [string, number]) => void;
     name: string;
     id: string;
 }) {
@@ -15,6 +15,8 @@ export function NoteButton({
                 className="noteBox"
                 onClick={async () => {
                     const content = await NotesOperations.ReadNote(id);
+                    localStorage.setItem("current_note_id", id);
+
                     onNoteChanged(content);
                 }}
             >

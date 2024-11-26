@@ -43,81 +43,102 @@ export default function ShareDialog({
 
     return (
         <dialog ref={shareDialogRef}>
-            <h1>Komu chcesz udostępnić tą notatkę?</h1>
-            <br />
-            <select
-                className="choose-friend"
-                defaultValue={
-                    friendList != null ? friendList[0].name : undefined
-                }
-                onChange={(value) => {
-                    setChoosenFriend(value.target.value);
-                }}
-            >
-                {friendList?.map((friend, index) => (
-                    <option key={index} value={friend.name}>
-                        {friend.name}
-                    </option>
-                ))}
-            </select>
-            <br />
-            <h2 className="share-title">Zezwól na edytowanie</h2>
-            <div className="allow-write-button">
-                <input
-                    className="allow-write-input"
-                    id="allow-write-yes"
-                    type="radio"
-                    name="allowWrite"
-                    value="yes"
-                    checked={canWriteStatus == ShareMode.CanWrite}
-                    onChange={(event) => {
-                        if (event.target.value == "yes") {
-                            setCanWriteStatus(ShareMode.CanWrite);
-                        } else {
-                            setCanWriteStatus(ShareMode.CanRead);
+            {friendList != null && friendList.length > 0 ? (
+                <>
+                    <h1>Komu chcesz udostępnić tą notatkę?</h1>
+                    <br />
+                    <select
+                        className="choose-friend"
+                        defaultValue={
+                            friendList != null && friendList.length > 0
+                                ? friendList[0].name
+                                : undefined
                         }
-                    }}
-                />
-                <label
-                    className="allow-write-single-button"
-                    htmlFor="allow-write-yes"
-                >
-                    Yes
-                </label>
-                <input
-                    className="allow-write-input"
-                    id="allow-write-no"
-                    type="radio"
-                    name="allowWrite"
-                    value="no"
-                    checked={canWriteStatus == ShareMode.CanRead}
-                    onChange={(event) => {
-                        if (event.target.value == "yes") {
-                            setCanWriteStatus(ShareMode.CanWrite);
-                        } else {
-                            setCanWriteStatus(ShareMode.CanRead);
-                        }
-                    }}
-                />
-                <label
-                    className="allow-write-single-button"
-                    htmlFor="allow-write-no"
-                >
-                    No
-                </label>
-            </div>
-            <br />
-            <button
-                className="share-button"
-                onClick={() => {
-                    if (choosenFriend != null) {
-                        onSharing(choosenFriend, canWriteStatus);
-                    }
-                    shareDialogRef.current?.close();
-                }}
-            >
-                Udostępnij
-            </button>
+                        onChange={(value) => {
+                            setChoosenFriend(value.target.value);
+                        }}
+                    >
+                        {friendList?.map((friend, index) => (
+                            <option key={index} value={friend.name}>
+                                {friend.name}
+                            </option>
+                        ))}
+                    </select>
+                    <br />
+                    <h2 className="share-title">Zezwól na edytowanie</h2>
+                    <div className="allow-write-button">
+                        <input
+                            className="allow-write-input"
+                            id="allow-write-yes"
+                            type="radio"
+                            name="allowWrite"
+                            value="yes"
+                            checked={canWriteStatus == ShareMode.CanWrite}
+                            onChange={(event) => {
+                                if (event.target.value == "yes") {
+                                    setCanWriteStatus(ShareMode.CanWrite);
+                                } else {
+                                    setCanWriteStatus(ShareMode.CanRead);
+                                }
+                            }}
+                        />
+                        <label
+                            className="allow-write-single-button"
+                            htmlFor="allow-write-yes"
+                        >
+                            Yes
+                        </label>
+                        <input
+                            className="allow-write-input"
+                            id="allow-write-no"
+                            type="radio"
+                            name="allowWrite"
+                            value="no"
+                            checked={canWriteStatus == ShareMode.CanRead}
+                            onChange={(event) => {
+                                if (event.target.value == "yes") {
+                                    setCanWriteStatus(ShareMode.CanWrite);
+                                } else {
+                                    setCanWriteStatus(ShareMode.CanRead);
+                                }
+                            }}
+                        />
+                        <label
+                            className="allow-write-single-button"
+                            htmlFor="allow-write-no"
+                        >
+                            No
+                        </label>
+                    </div>
+                    <br />
+                    <button
+                        className="share-button"
+                        onClick={() => {
+                            if (choosenFriend != null) {
+                                onSharing(choosenFriend, canWriteStatus);
+                            }
+                            shareDialogRef.current?.close();
+                        }}
+                    >
+                        Udostępnij
+                    </button>
+                </>
+            ) : (
+                <>
+                    <h1>
+                        Musisz najpierw dodać znajomych, aby móc im udostępniać
+                        notatkę.
+                    </h1>
+                    <button
+                        className="share-button"
+                        onClick={() => {
+                            shareDialogRef.current?.close();
+                        }}
+                    >
+                        Zamknij
+                    </button>
+                </>
+            )}
         </dialog>
     );
 }

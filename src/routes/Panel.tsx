@@ -15,6 +15,9 @@ import ShareDialog from "../components/ShareDialog";
 export function Panel() {
     const navigate = useNavigate();
     const [notes, setNotes] = useState<Array<Note>>();
+    const [currentNoteID, setCurrentNoteID] = useState<string | null>(null);
+    const [currentNoteOwnerShip, setCurrentNoteOwnerShip] =
+        useState<number>(-1);
     const markdownRef = useRef<MDXEditorMethods>(null);
 
     const shareDialogRef = useRef<HTMLDialogElement>(null);
@@ -34,9 +37,10 @@ export function Panel() {
 
         const currentNoteID = localStorage.getItem("current_note_id");
         if (currentNoteID == null) return;
+        setCurrentNoteID(currentNoteID);
 
         notesOperation.ReadNote(currentNoteID).then((noteContent) => {
-            markdownRef.current?.setMarkdown(noteContent);
+            markdownRef.current?.setMarkdown(noteContent[0]);
         });
     }, []);
 
@@ -51,8 +55,10 @@ export function Panel() {
                             <NoteButton
                                 onNoteChanged={(noteContent) => {
                                     markdownRef.current?.setMarkdown(
-                                        noteContent
+                                        noteContent[0]
                                     );
+                                    setCurrentNoteOwnerShip(noteContent[1]);
+                                    setCurrentNoteID(note.id);
                                 }}
                                 key={note.id}
                                 name={note.title}
@@ -63,15 +69,22 @@ export function Panel() {
                             <button
                                 className="addButton"
                                 onClick={async () => {
-                                    const nodeID =
+                                    const noteID =
                                         await notesOperation.createNewNote();
                                     const notes =
                                         await notesOperation.getNotes();
                                     setNotes(notes);
                                     const noteContent =
-                                        await notesOperation.ReadNote(nodeID);
+                                        await notesOperation.ReadNote(noteID);
+                                    console.log(noteID);
+                                    localStorage.setItem(
+                                        "current_note_id",
+                                        noteID
+                                    );
+                                    setCurrentNoteID(noteID);
+                                    setCurrentNoteOwnerShip(noteContent[1]);
                                     markdownRef.current?.setMarkdown(
-                                        noteContent
+                                        noteContent[0]
                                     );
                                 }}
                             >
@@ -121,13 +134,47 @@ export function Panel() {
                 </header>
                 <div className="note">
                     <CustomScroll heightRelativeToParent="100%">
-                        <MarkdownEditor
-                            onChange={notesOperation.ModifyNote}
-                            markdownRef={markdownRef}
-                            shareDialogRef={shareDialogRef}
-                        >
-                            {" "}
-                        </MarkdownEditor>
+                        {currentNoteID == null ? (
+                            <h1>Nie została wybrana żadna notatka</h1>
+                        ) : (
+                            <MarkdownEditor
+                                onDelete={() => {
+                                    const currentNoteID =
+                                        localStorage.getItem("current_note_id");
+                                    if (currentNoteID == null) return;
+                                    const sessionID =
+                                        localStorage.getItem("session_id");
+                                    if (sessionID == null) return;
+
+                                    FetchToServer(
+                                        "/delete-note",
+                                        JSON.stringify({
+                                            session_id: sessionID,
+                                            note_id: currentNoteID,
+                                        })
+                                    ).then((response) => {
+                                        if (response.success) {
+                                            notesOperation
+                                                .getNotes()
+                                                .then((notes) =>
+                                                    setNotes(notes)
+                                                );
+                                            localStorage.removeItem(
+                                                "current_note_id"
+                                            );
+                                            setCurrentNoteID(null);
+                                            setCurrentNoteOwnerShip(-1);
+                                        }
+                                    });
+                                }}
+                                onChange={notesOperation.ModifyNote}
+                                markdownRef={markdownRef}
+                                shareDialogRef={shareDialogRef}
+                                isOwner={currentNoteOwnerShip == 0}
+                            >
+                                {" "}
+                            </MarkdownEditor>
+                        )}
                     </CustomScroll>
                 </div>
             </div>
